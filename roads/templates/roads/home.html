@@ -2,7 +2,9 @@
 {% load static %}
 {% block title %} Map {% endblock %}
 
-{% block css %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/map.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -10,4 +12,5 @@
 {% endblock %}
 
 {% block javascript %}
+
 {% endblock %}

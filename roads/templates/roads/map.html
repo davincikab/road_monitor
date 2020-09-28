@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %} Map {% endblock %}
-<link rel="stylesheet" href="{ static 'css/map.css'}">
-{% block css %}
 
+{% block style %}
+    <link rel="stylesheet" href="{% static 'leaflet/leaflet.css' %}">
+    <link rel="stylesheet" href="{% static 'css/map.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -11,5 +12,6 @@
 {% endblock %}
 
 {% block javascript %}
-<script src="{% static 'js/map.js'%}"></script>
+    <script src="{% static 'leaflet/leaflet.js'%}"></script>
+    <script src="{% static 'js/map.js'%}"></script>
 {% endblock %}

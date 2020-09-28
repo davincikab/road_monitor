@@ -1,4 +1,45 @@
 #map {
-    height: 90vh;
+    height: 92vh;
     width: 100%;
+}
+
+/*  */
+.leaflet-touch .leaflet-bar {
+    border-width: 0px !important;
+}
+
+.leaflet-touch .leaflet-bar a:first-child {
+    margin-bottom: 3px;
+}
+
+.leaflet-touch .leaflet-control-layers {
+    border:0px;
+    border-radius: 50%;
+    padding: 4px;
+    box-shadow: 2px 2px 0.4em #555;
+    background-color: #ec877b;
+}
+
+.leaflet-control.leaflet-control-layers-expanded {
+    border-radius: 2px !important;
+    background-color: white !important;
+}
+
+.leaflet-touch .leaflet-control-layers-toggle {
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+}
+
+.leaflet-touch .leaflet-bar a{
+    padding: 0;
+    border-radius: 50% !important;
+    text-align: center;
+    color: white;
+    font-weight: 500;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    background-color: #ec877b;
+    box-shadow: 2px 2px 0.2em #5555;
 }
