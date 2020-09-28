@@ -3,7 +3,7 @@ from django.contrib.gis.db import models
 
 class Municipality(models.Model):
     fid = models.IntegerField(primary_key=True)
-    geom = models.PolygonField(blank=True, null=True)  # This field type is a guess.
+    geom = models.MultiPolygonField(blank=True, null=True)  # This field type is a guess.
     constituen = models.CharField(max_length=254, blank=True, null=True)
     county_nam = models.CharField(max_length=254, blank=True, null=True)
     area = models.FloatField(blank=True, null=True)
@@ -15,7 +15,7 @@ class Municipality(models.Model):
 
 class Road(models.Model):
     objectid = models.BigIntegerField(primary_key=True)
-    geom = models.LineStringField(blank=True, null=True)  # This field type is a guess.
+    geom = models.MultiLineStringField(blank=True, null=True)  # This field type is a guess.
     fid_field = models.BigIntegerField(db_column='fid_', blank=True, null=True)  # Field renamed because it ended with '_'.
     full_id = models.TextField(blank=True, null=True)
     osm_id = models.TextField(blank=True, null=True)
@@ -52,7 +52,7 @@ class Road(models.Model):
 
 class Wards(models.Model):
     objectid = models.FloatField(primary_key=True)
-    geom = models.PolygonField(blank=True, null=True)  # This field type is a guess.
+    geom = models.MultiPolygonField(blank=True, null=True)  # This field type is a guess.
     const_nam = models.CharField(max_length=50, blank=True, null=True)
     elec_area_field = models.CharField(db_column='elec_area_', max_length=50, blank=True, null=True)  # Field renamed because it ended with '_'.
     local_auth = models.CharField(max_length=50, blank=True, null=True)
