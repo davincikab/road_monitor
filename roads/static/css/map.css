@@ -16,13 +16,13 @@
     border:0px;
     border-radius: 50%;
     padding: 4px;
-    box-shadow: 2px 2px 0.4em #555;
-    background-color: #ec877b;
+    box-shadow: 2px 2px 0.4em var(--gray);
+    background-color: var(--brand-color);
 }
 
 .leaflet-control.leaflet-control-layers-expanded {
     border-radius: 2px !important;
-    background-color: white !important;
+    background-color: var(--white) !important;
 }
 
 .leaflet-touch .leaflet-control-layers-toggle {
@@ -35,11 +35,11 @@
     padding: 0;
     border-radius: 50% !important;
     text-align: center;
-    color: white;
+    color: var(--white);
     font-weight: 500;
     width: 28px;
     height: 28px;
     line-height: 28px;
-    background-color: #ec877b;
-    box-shadow: 2px 2px 0.2em #5555;
+    background-color: var(--brand-color);
+    box-shadow: 2px 2px 0.2em var(--gray);
 }

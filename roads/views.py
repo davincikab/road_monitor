@@ -14,8 +14,13 @@ from .models import Wards, Road, Municipality
 import json
 
 # Create your views here.
-def home(request):
-    return HttpResponse("Home Coming")
+class LandingView(TemplateView):
+    template_name = "roads/landing.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+    
 
 class HomeView(TemplateView):
     template_name = "roads/home.html"
@@ -33,7 +38,14 @@ class MapView(TemplateView):
         context = super().get_context_data(**kwargs)
         # context["data"] = roads_data(self.request)
         return context
-    
+
+class DashboardView(TemplateView):
+    template_name = "roads/dashboard.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
 def wards_data(request):
     ward = serialize('geojson', Wards.objects.all())
     municipality = serialize('geojson', Municipality.objects.all())

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home, roads_data, wards_data, MapView, HomeView
+from .views import roads_data, wards_data, MapView, HomeView, LandingView, DashboardView
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -14,8 +14,10 @@ urlpatterns = [
     path("other_data/", wards_data, name="wards"),
 
     # template views
-    path("", HomeView.as_view(), name="home"),
-    path("map/", MapView.as_view(), name="name")
+    path("", LandingView.as_view(), name="landing"),
+    path("home/", HomeView.as_view(), name="home"),
+    path("map/", MapView.as_view(), name="map"),
+    path("dashboard/", DashboardView.as_view(), name="dashboard"),
 ]
 
 # configure static anf media files

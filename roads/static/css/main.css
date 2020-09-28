@@ -1,0 +1,19 @@
+:root {
+    --brand-color:#ec877b;
+    --brand-cta:#ec958c;
+    --gray:#555;
+    --white:#fff;
+}
+
+body {
+    font-family: 'Nunito Sans', sans-serif;
+}
+
+.navbar-brand {
+    color:var(--brand-color) !important;
+    font-weight: 800;
+}
+
+.navbar-collapse {
+    justify-content: center;
+}

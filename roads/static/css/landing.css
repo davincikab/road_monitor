@@ -1,0 +1,67 @@
+.navbar {
+    background-color: transparent !important;
+}
+
+.navbar-brand {
+    font-size: 1.5em;
+}
+
+.nav-item {
+    margin: 0em 0.5em;
+}
+
+.nav-item .nav-link {
+    color:var(--white) !important;
+    padding:0em;
+    transition: all 0.3s linear;
+}
+
+.nav-link:hover {
+    border-bottom: 1px solid var(--brand-color);
+}
+
+
+.home {
+    background-image: url(/static/images/highway.jpg);
+    height: 100vh;
+    margin-top: -80px;
+    background-size: cover;
+    background-color: #404040;
+    background-blend-mode: soft-light;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-matter {
+    max-width: 1080px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-matter > p {
+    font-weight: 600;
+    font-size: 1.4em;
+    text-align: center;
+    color:var(--white)
+}
+
+.btn-brand {
+    color:var(--white);
+    background-color: var(--brand-cta);
+    font-size: 1.4em;
+    transition: all 0.3s linear;
+}
+
+.btn-brand:hover, .btn-brand:focus {
+    color:var(--white);
+    text-decoration: none;
+    background-color: var(--brand-color);
+    letter-spacing: 2px;
+}
+
+.title {
+    font-weight: 700;
+}
