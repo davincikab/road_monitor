@@ -1,3 +1,6 @@
+var closeFilterButton = document.getElementById("btn-close");
+var filterSection = document.getElementById("filter-section");
+
 var map = L.map("map", {
     center:{lat: 0.5108141559002755, lng: 35.275297164917},
     zoom:14,
@@ -120,5 +123,29 @@ map.on("overlayremove", function(e) {
 });
 
 // Visual type
+// Surface, Maintenance, Construction, material, road structure, contractor, Authority
 
 // Animate roads
+
+// Filter Section
+var filterControl = new L.Control({position:"topleft"});
+
+filterControl.onAdd = function(map) {
+    let div = L.DomUtil.create("div", "leaflet-touch leaflet-bar");
+
+    div.innerHTML = "<a><i class='fa fa-filter'></i></a>";
+
+    div.addEventListener("click", function(e) {
+        filterSection.classList.toggle("collapse-filter");
+        map.removeControl(filterControl);
+    });
+
+    return div;
+}
+
+filterControl.addTo(map);
+
+closeFilterButton.addEventListener("click", function(e) {
+    filterSection.classList.toggle("collapse-filter");
+    filterControl.addTo(map);
+});

@@ -1,6 +1,32 @@
 #map {
     height: 92vh;
     width: 100%;
+    z-index: 0;
+}
+
+.filter-section {
+    position: absolute;
+    height: 80vh;
+    width:360px;
+    z-index: 1000;
+    top: 12%;
+    background-color: var(--white);
+    box-shadow: 2px 2px 0.4em var(--gray);
+    transition: transform 0.5s ease-in-out;
+}
+
+.filter-section.collapse-filter {
+    transform:translateX(-360px);
+}
+
+.btn-close {
+    position: absolute;
+    top:0%;
+    cursor: pointer;
+    right:2%;
+    font-size: 2em;
+    font-weight: 700;
+    background-color: transparent;
 }
 
 /*  */
