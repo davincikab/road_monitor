@@ -1,11 +1,23 @@
 from django.urls import path
-from .views import home, roads_data, wards_data
+from .views import home, roads_data, wards_data, MapView, HomeView
+
+from django.conf import settings
+from django.conf.urls.static import static
 
 # application namspace
 app_name = "roads"
 
 urlpatterns = [
-    path("", home, name="home"),
+
+    # data views
     path("roads/", roads_data, name="roads"),
     path("other_data/", wards_data, name="wards"),
+
+    # template views
+    path("", HomeView.as_view(), name="home"),
+    path("map/", MapView.as_view(), name="name")
 ]
+
+# configure static anf media files
+if settings.DEBUG:
+    urlpatterns +=  static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Map {% endblock %}
+<link rel="stylesheet" href="{ static 'css/map.css'}">
+{% block css %}
+
+{% endblock %}
+
+{% block content %}
+<div class="map" id="map"></div>
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'js/map.js'%}"></script>
+{% endblock %}
