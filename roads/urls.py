@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import roads_data, wards_data, MapView, HomeView, LandingView, DashboardView
+from .views import roads_data, wards_data, MapView, HomeView, LandingView, DashboardView, get_graph_data
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -12,6 +12,7 @@ urlpatterns = [
     # data views
     path("roads/", roads_data, name="roads"),
     path("other_data/", wards_data, name="wards"),
+    path("dashboard_data/", get_graph_data, name="graph-data"),
 
     # template views
     path("", LandingView.as_view(), name="landing"),

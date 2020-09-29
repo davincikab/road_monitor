@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load road_tags %}
 {% load static %}
 {% block title %} Landing {% endblock %}
 
@@ -16,7 +17,7 @@
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
-                      <h2 class="bold">50</h2>
+                      <h2 class="bold">{{ road_count }}</h2>
                       <span class="small">No. Roads</span>
                     </div>
                 </div>
@@ -24,7 +25,7 @@
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
-                        <h2 class="bold">810 km</h2>
+                        <h2 class="bold">{{ total_length|floatformat:1 }} km</h2>
                         <span class="small">Total Length</span>
                     </div>
                 </div>
@@ -33,15 +34,15 @@
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
-                        <h2 class="bold">10</h2>
-                        <span class="small">No. Contructors</span>
+                        <h2 class="bold">{{contractors_count}}</h2>
+                        <span class="small">No. Contractors</span>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
-                      <h2 class="bold">168 M</h2>
+                      <h2 class="bold">{{total_cost|money}}</h2>
                       <span class="small">Total Cost</span>
                     </div>
                 </div>
@@ -76,50 +77,12 @@
                     </div>
                 </div>
                 <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        NULL 
-                        <span class="badge badge-brand badge-pill">14</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        ASIS
-                    <span class="badge badge-brand badge-pill">14</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        DITTMAN
-                    <span class="badge badge-brand badge-pill">14</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        GREATWAYS
-                    <span class="badge badge-brand badge-pill">14</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        HILLTEN
-                    <span class="badge badge-brand badge-pill">14</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        ISAPAM
-                    <span class="badge badge-brand badge-pill">14</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        MARSH
-                    <span class="badge badge-brand badge-pill">14</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        NEWTECH
-                    <span class="badge badge-brand badge-pill">14</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        NEWWORLD
-                    <span class="badge badge-brand badge-pill">14</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        ROADWAYS
-                    <span class="badge badge-brand badge-pill">14</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        TAI
-                    <span class="badge badge-brand badge-pill">14</span>
-                    </li>
+                    {% for contractor in contractors %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ contractor.contractor|lower|capfirst }} 
+                            <span class="badge badge-brand badge-pill">{{contractor.contracts_count}}</span>
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
             
@@ -128,27 +91,12 @@
                     <h4>Materials</h4>
                 </div>
                 <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        marram, qarrysand,quarry dust,concrete
-                    <span class="badge badge-brand badge-pill">14</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        marram, qarrysand,quarry dust,cement
-                    <span class="badge badge-brand badge-pill">8</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        marram, qarrysand,quarry dust 
-                    <span class="badge badge-brand badge-pill">4</span>
-                    </li>
-
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        marram, qarrysand
-                    <span class="badge badge-brand badge-pill">4</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                       NULL
-                    <span class="badge badge-brand badge-pill">4</span>
-                    </li>
+                    {% for material in materials %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ material.material}}
+                        <span class="badge badge-brand badge-pill">{{material.material_count}}</span>
+                        </li>
+                    {% endfor %}
                 </ul>
 
             </div>
@@ -159,9 +107,9 @@
                 <h4>Road Authority</h4>
             </div>
             <ul class="list-group list-group-horizontal">
-                <li class="list-group-item flex-fill">KURA</li>
-                <li class="list-group-item flex-fill">KEHNHA</li>
-                <li class="list-group-item flex-fill">KERRA</li>
+                {% for authority in road_authorities %}
+                    <li class="list-group-item flex-fill">{{authority.authority}}</li>
+                {% endfor %}
             </ul>
         </div>
    </div>

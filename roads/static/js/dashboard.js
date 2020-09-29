@@ -5,12 +5,27 @@ var roadsChart = new Chart(ctxLine, {
     data: {
         labels:["2013", "2014", "2015", "2016", "2017"],
         datasets:[{
-            label: "# of Roads",
-            data:[2, 5, 10, 5, 15],
+            // label: "Construction of Roads",
+            data:[2, 5, 10, 25, 15],
             backgroundColor:"#36384480"
         }]
     },
-    options: {}
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    stepSize: 1
+                }
+            }],
+            xAxes:[{
+                ticks:{
+                    beginAtZero: false,
+                    stepSize: 3
+                }
+            }]
+        }
+    }
 });
 
 // Maintenace chart
@@ -26,7 +41,16 @@ var maintenanceChart = new Chart(ctxLine, {
             backgroundColor:"#36384480"
         }]
     },
-    options: {}
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    stepSize: 1
+                }
+            }]
+        }
+    }
 });
 
 // structure-chart
@@ -60,3 +84,48 @@ var roadSurfaceChart = new Chart(ctxLine, {
     },
     options: {}
 });
+
+// load the data
+fetch("/dashboard_data/")
+.then(response => {
+    return response.json();
+})
+.then(data => {
+    let {construction, maintenance, structure, surface} = data;
+
+    // construction
+    let [years, constructionCount] = cleanAndSort(construction, "constructi");
+    roadsChart.data.labels = years;
+    roadsChart.data.datasets[0].data = constructionCount
+    roadsChart.update();
+
+    // Maintenance
+    console.log(maintenance);
+    let [maintenanceYears, maintenanceCount] = cleanAndSort(maintenance, "maintenanc");
+
+    console.log(maintenanceYears);
+    maintenanceChart.data.labels = maintenanceYears;
+    maintenanceChart.data.datasets[0].data = maintenanceCount;
+    maintenanceChart.update();
+
+    // surface
+    // structure
+
+
+})
+.catch(error => {
+    console.log(error);
+});
+
+function cleanAndSort(data, field) {
+    newData = data.filter(element => element[field]).map(element => {
+        element.year = parseInt(element[field].split(',')[1]);
+        return element;
+    });
+
+    newData = newData.sort((a, b) => a.year - b.year);
+    let years = newData.map(el => el.year);
+    let values = newData.map(el =>  el.count);
+
+    return [years, values]
+}
