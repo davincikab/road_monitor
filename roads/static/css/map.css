@@ -14,7 +14,7 @@
     height: 80vh;
     width:360px;
     z-index: 1000;
-    top: 12%;
+    top: 18%;
     background-color: var(--white);
     box-shadow: 2px 2px 0.4em var(--gray);
     transition: transform 0.5s ease-in-out;
@@ -73,4 +73,15 @@
     line-height: 28px;
     background-color: var(--brand-color);
     box-shadow: 2px 2px 0.2em var(--gray);
+}
+
+label {
+    margin-left:0.5em;
+    margin-bottom: 0;
+    font-size: 1.1em;
+}
+
+.form-group, .col {
+    display: flex;
+    align-items: center;
 }

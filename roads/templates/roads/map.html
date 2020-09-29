@@ -9,10 +9,93 @@
 
 {% block content %}
 <div class="map" id="map">
-    <div class="filter-section collapse-filter" id="filter-section">
+    <div class="filter-section py-2 px-2" id="filter-section">
         <span class="btn-close" id="btn-close">&times;</span>
-        <div class="section-filter" id="secton-filter">
+        <h5>Visual Type</h5>
+        <div class="section-viusal py-2 px-2" id="secton-visual">
+            <div class="form-group d-flex">
+                <input class="form-check" type="radio" name="visual" id="material" checked>
+                <label class="form-check-label" for="material">
+                  Default
+                </label>
+            </div>
+            <div class="form-group d-flex">
+                <input class="form-check" type="radio" name="visual" id="material" >
+                <label class="form-check-label" for="material">
+                  Material
+                </label>
+            </div>
 
+            <div class="form-group d-flex">
+                <input class="form-check" type="radio" name="visual" id="contractor" >
+                <label class="form-check-label" for="contractor">
+                  Contractor
+                </label>
+            </div>
+
+            <div class="form-group d-flex">
+                <input class="form-check" type="radio" name="visual" id="surface" >
+                <label class="form-check-label" for="surface">
+                  Surface
+                </label>
+            </div>
+
+            <div class="form-group d-flex">
+                <input class="form-check" type="radio" name="visual" id="structure" >
+                <label class="form-check-label" for="structure">
+                  Structure
+                </label>
+            </div>
+        </div>
+
+        <h5>Filter</h5>
+        <div class="section-filter" id="secton-filter">
+            <div class="form-row mb-2">
+                <div class="col">
+                  <input type="radio" class="form-check" name="completed"  id="completed" placeholder="First name">
+                  <label for="">Completed</label>
+                </div>
+                <div class="col">
+                  <input type="radio" class="form-check" name="ongoing" id="ongoing" placeholder="Last name">
+                  <label for="">Ongoing</label>
+                </div>
+            </div>
+
+            <div class="input-group  input-group-sm mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="inputGroupSelect01">Material</label>
+                </div>
+                <select class="custom-select" id="material" name="material">
+                  <option selected>Choose...</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+            </div>
+
+            <div class="input-group  input-group-sm mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="contractor">Contractor</label>
+                </div>
+                <select class="custom-select" id="contractor">
+                  <option selected>Choose...</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+            </div>
+
+            <div class="input-group  input-group-sm mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="inputGroupSelect01">Surface</label>
+                </div>
+                <select class="custom-select" id="inputGroupSelect01">
+                  <option selected>Choose...</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+            </div>
         </div>
     </div>
 </div>
