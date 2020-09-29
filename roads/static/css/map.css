@@ -1,3 +1,7 @@
+.navbar {
+    box-shadow: 2px 1px 0.5em var(--gray);
+}
+
 #map {
     height: 92vh;
     width: 100%;
