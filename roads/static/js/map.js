@@ -6,6 +6,7 @@ var materials;
 var structure;
 var surface;
 
+
 var map = L.map("map", {
     center:{lat: 0.5108141559002755, lng: 35.275297164917},
     zoom:14,
@@ -20,6 +21,13 @@ var cartoLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x
     maxZoom: 20,
     minZoom: 0
 }).addTo(map);
+
+var cartoDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}' + (L.Browser.retina ? '@2x.png' : '.png'), {
+    attribution:'&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 20,
+    minZoom: 0
+});
 
 // 
 function getRoadColor(visual, feature) {
@@ -152,7 +160,8 @@ var overlay = {
 };
 
 var baseLayer = {
-    "Carto Light":cartoLight
+    "Carto Light":cartoLight,
+    "Carto Dark": cartoDark
 };
 
 L.control.layers(baseLayer, overlay, {collapsed:false}).addTo(map);
@@ -174,8 +183,23 @@ map.on("overlayremove", function(e) {
     roads.bringToFront();
 });
 
-// Visual type
-// Surface, Maintenance, Construction, material, road structure, contractor, Authority
+// ========================= Visual type =============================
+// Visual Legend
+var legendControl = new L.Control({position:"bottomright"});
+legendControl.onAdd = function(map) {
+    let div = L.DomUtil.create("div", "accordion bg-white");
+
+    div.innerHTML = '<button class="btn btn-block bg-light text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">'+
+    'Legend</button>';
+
+   div.innerHTML += '<div id="collapseOne">'+
+   'Anim pariatur cliche reprehenderit</div>';
+
+    return div;
+}
+
+legendControl.addTo(map);
+
 var visualType = document.querySelectorAll(".form-group .form-check");
 visualType.forEach(visual => {
     visual.addEventListener("change", function(e) {
@@ -197,16 +221,49 @@ function updateVisual(value) {
 
     if(value != "default") {
         updateLegend(value);
+        if(!map.hasLayer(cartoDark)) {
+            cartoDark.addTo(map);
+            map.removeLayer(cartoLight);
+        }
     }
 }
 
 
 function updateLegend(value) {
+    let legendContainer = document.getElementById("collapseOne");
+   
+    // create a color scale
+    let legendContent = "";
+    let feature = roads.toGeoJSON().features[0];
 
+    if(value == "material") {
+        legendContent = getLegendContent(materials, feature, "material", value);
+    } else if (value == "contractor") {
+        legendContent = getLegendContent(contractors, feature, "contractor", value);
+    } else if (value == "surface") {
+        legendContent = getLegendContent(surface, feature, "surface", value);
+    } else if (value == "structure") {
+        legendContent = getLegendContent(structure, feature, "road_struc", value);
+    } 
+
+
+    legendContainer.innerHTML = legendContent;
+}
+
+function getLegendContent(data, feature, field, value) {
+    let legendContent = "";
+    data.forEach(element => {
+        feature.properties[field] = element;
+        let color = getRoadColor(value, feature);
+
+        legendContent += "<div class='legend-item' style='background-color:"+color+"'></div><span>"+element+"</span>";
+    });
+
+    return legendContent;
 }
 
 function toggleLegend() {
-    
+        
 }
 
 // Animate roads

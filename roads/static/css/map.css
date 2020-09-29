@@ -75,6 +75,26 @@
     box-shadow: 2px 2px 0.2em var(--gray);
 }
 
+.accordion {
+    box-shadow: 2px 2px 0.2em var(--gray);
+    /* display:block;*/
+    min-width: 20vw; 
+    max-height: 35vh;
+    overflow-y: auto;
+    /* border-radius: 6px; */
+}
+
+#collapseOne {
+    background-color: var(--gray);
+    color:var(--white);
+}
+
+.legend-item {
+    height: 20px;
+    padding:0.1em;
+    width:40%;
+    margin: 0.5em;
+}
 label {
     margin-left:0.5em;
     margin-bottom: 0;
