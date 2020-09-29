@@ -1,6 +1,11 @@
 var closeFilterButton = document.getElementById("btn-close");
 var filterSection = document.getElementById("filter-section");
 
+var contractors;
+var materials;
+var structure;
+var surface;
+
 var map = L.map("map", {
     center:{lat: 0.5108141559002755, lng: 35.275297164917},
     zoom:14,
@@ -15,6 +20,39 @@ var cartoLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x
     maxZoom: 20,
     minZoom: 0
 }).addTo(map);
+
+// 
+function getRoadColor(visual, feature) {
+    let colorsOne = ['#a50026','#d73027','#f46d43','#fdae61','#fee090','#ffffbf','#e0f3f8','#abd9e9','#74add1','#4575b4','#313695'];
+    let colorsTwo = ['#d53e4f','#fc8d59','#fee08b','#ffffbf','#e6f598','#99d594','#3288bd']
+
+    if (visual == "material") {
+        let value = feature.properties.material;
+        let index = materials.indexOf(value);
+
+        return materials.length <= 7 ? colorsTwo[index] : colorsOne[index];
+    } else if (visual == "contractor") {
+        let value = feature.properties.contractor;
+        let index = contractors.indexOf(value);
+        
+        return contractors.length <= 7 ? colorsTwo[index] : colorsOne[index];
+
+    } else if (visual == "structure") {
+        let value = feature.properties.road_struc;
+        let index = structure.indexOf(value);
+        
+        return structure.length <= 7 ? colorsTwo[index] : colorsOne[index];
+
+    } else if (visual == "surface") {
+        let value = feature.properties.surface;
+        let index = surface.indexOf(value);
+        
+        return surface <= 7 ? colorsTwo[index] : colorsOne[index];
+    } else {
+        return "#ff002e";
+    }
+
+}
 
 // roads layer
 var roads = L.geoJson(null, {
@@ -72,10 +110,16 @@ fetch("/roads")
 }).then(road => {
     console.log(road);
     roads.addData(road);
+
+    materials = getUniqueValues(road, "material");
+    surface = getUniqueValues(road, "surface");
+    structure = getUniqueValues(road, "road_struc");
+    contractors = getUniqueValues(road, "contractor");
 })
 .catch(error => {
     console.log(error);
 });
+
 
 fetch("/other_data")
 .then(response => {
@@ -91,6 +135,14 @@ fetch("/other_data")
 .catch(error => {
     console.log(error);
 });
+
+// get uniques values
+function getUniqueValues(data, field) {
+    let newData = data.features.map(feature => feature.properties[field]);
+    newData = [...new Set(newData)];
+
+    return newData;
+}
 
 // layer control
 var overlay = {
@@ -124,6 +176,38 @@ map.on("overlayremove", function(e) {
 
 // Visual type
 // Surface, Maintenance, Construction, material, road structure, contractor, Authority
+var visualType = document.querySelectorAll(".form-group .form-check");
+visualType.forEach(visual => {
+    visual.addEventListener("change", function(e) {
+        // get the value
+        let value = e.target.value;
+        updateVisual(value);
+    });
+});
+
+
+function updateVisual(value) {
+    roads.eachLayer(layer => {
+        let feature = layer.feature;
+        layer.setStyle({
+            color:getRoadColor(value, feature),
+            weight:3
+        });
+    });
+
+    if(value != "default") {
+        updateLegend(value);
+    }
+}
+
+
+function updateLegend(value) {
+
+}
+
+function toggleLegend() {
+    
+}
 
 // Animate roads
 
