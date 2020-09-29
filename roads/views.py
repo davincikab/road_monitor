@@ -60,7 +60,7 @@ class DashboardView(TemplateView):
 def get_graph_data(request):
     construction = Road.objects.values('constructi').annotate(count=Count("constructi"))
     maintenance = Road.objects.values('maintenanc').annotate(count=Count("maintenanc"))
-    surface = Road.objects.values('maintenanc').annotate(count=Count("maintenanc"))
+    surface = Road.objects.values('surface').annotate(count=Count("surface"))
     structure = Road.objects.values('road_struc').annotate(count=Count("road_struc"))
 
     construction = [c for c in construction]

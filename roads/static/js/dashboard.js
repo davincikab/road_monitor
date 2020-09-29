@@ -5,12 +5,21 @@ var roadsChart = new Chart(ctxLine, {
     data: {
         labels:["2013", "2014", "2015", "2016", "2017"],
         datasets:[{
-            // label: "Construction of Roads",
             data:[2, 5, 10, 25, 15],
             backgroundColor:"#36384480"
         }]
     },
     options: {
+        title: {
+            display: true,
+            text: 'Road Construction'
+        },
+        legend: {
+            display: false,
+            labels: {
+                fontColor: 'rgb(255, 99, 132)'
+            }
+        },
         scales: {
             yAxes: [{
                 ticks: {
@@ -42,6 +51,16 @@ var maintenanceChart = new Chart(ctxLine, {
         }]
     },
     options: {
+        title: {
+            display: true,
+            text: 'Road Maintenance'
+        },
+        legend: {
+            display: false,
+            labels: {
+                fontColor: 'rgb(255, 99, 132)'
+            }
+        },
         scales: {
             yAxes: [{
                 ticks: {
@@ -66,7 +85,18 @@ var roadStructureChart = new Chart(ctxLine, {
             backgroundColor:'#EC877B'
         }]
     },
-    options: {}
+    options: {
+        title: {
+            display: true,
+            text: 'Road Structure'
+        },
+        legend: {
+            display: false,
+            labels: {
+                fontColor: 'rgb(255, 99, 132)'
+            }
+        },
+    }
 });
 
 // structure-chart
@@ -82,7 +112,18 @@ var roadSurfaceChart = new Chart(ctxLine, {
             backgroundColor: "#EC877B"
         }]
     },
-    options: {}
+    options: {
+        title: {
+            display: true,
+            text: 'Road Surface'
+        },
+        legend: {
+            display: false,
+            labels: {
+                fontColor: 'rgb(255, 99, 132)'
+            }
+        },
+    }
 });
 
 // load the data
@@ -91,6 +132,7 @@ fetch("/dashboard_data/")
     return response.json();
 })
 .then(data => {
+    console.log(data);
     let {construction, maintenance, structure, surface} = data;
 
     // construction
@@ -100,16 +142,23 @@ fetch("/dashboard_data/")
     roadsChart.update();
 
     // Maintenance
-    console.log(maintenance);
     let [maintenanceYears, maintenanceCount] = cleanAndSort(maintenance, "maintenanc");
 
-    console.log(maintenanceYears);
     maintenanceChart.data.labels = maintenanceYears;
     maintenanceChart.data.datasets[0].data = maintenanceCount;
     maintenanceChart.update();
 
     // surface
+    console.log(surface);
+    roadSurfaceChart.data.labels = surface.map(el => el.surface);
+    roadSurfaceChart.data.datasets[0].data =  surface.map(el => el.count);
+    roadSurfaceChart.update();
+
     // structure
+    console.log(structure);
+    roadStructureChart.data.labels = structure.map(el => el.road_struc);
+    roadStructureChart.data.datasets[0].data =  structure.map(el => el.count);
+    roadStructureChart.update();
 
 
 })
