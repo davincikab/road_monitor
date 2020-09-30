@@ -87,6 +87,50 @@
     box-shadow: 2px 2px 0.2em var(--gray);
 }
 
+.leaflet-popup-content-wrapper{
+    overflow: hidden;
+    border-radius: 0;
+    padding: 0;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+    color:var(--white);
+}
+
+.leaflet-popup-content-wrapper .leaflet-popup-content {
+    margin:0;
+}
+
+.popup-content {
+    overflow: hidden;
+    padding: 0;
+}
+
+.popup-title {
+    width: 100%;
+    background-color:var(--brand-color);
+    color: var(--white);
+    text-align: center;
+    margin-top: 0px;
+    font-size: 1.5em;
+    padding: 0.5em 1rem;
+}
+
+.popup-body {
+    padding:0 0.5em;
+}
+
+.popup-body .popup-item {
+    margin:0.8em 0;
+}
+
+.popup-item {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    font-size: 1.1em;
+}
+
 .accordion {
     box-shadow: 2px 2px 0.2em var(--gray);
     width: 100%;

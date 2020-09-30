@@ -14,8 +14,8 @@ var surface;
 
 
 var map = L.map("map", {
-    center:{lat: 0.5108141559002755, lng: 35.275297164917},
-    zoom:14,
+    center:{lat: 0.5188716059672112, lng: 35.27007222175599},
+    zoom:15,
     minZoom:10
 });
 
@@ -26,14 +26,14 @@ var cartoLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x
     subdomains: 'abcd',
     maxZoom: 20,
     minZoom: 0
-}).addTo(map);
+});
 
 var cartoDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}' + (L.Browser.retina ? '@2x.png' : '.png'), {
     attribution:'&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attributions">CARTO</a>',
     subdomains: 'abcd',
     maxZoom: 20,
     minZoom: 0
-});
+}).addTo(map);;
 
 // 
 function getRoadColor(visual, feature) {
@@ -76,10 +76,30 @@ var roads = L.geoJson(null, {
             weight:2,
         }
     },
-    onEachFeature:function(feature, layer) {
-
-    }
+    onEachFeature:onEachRoadFeature
 });
+
+function onEachRoadFeature(feature, layer) {
+    let popupContent = "<div class='popup-content'>"+
+    "<h5 class='popup-title'>"+ feature.properties.name +"</h5>"+
+    "<div class='popup-body'>"+
+        "<p class='popup-item'>Surface<b>"+ feature.properties.surface +"</b></p>"+
+        "<p class='popup-item'>Contruction<b>"+ feature.properties.contructi +"</b></p>"+
+        "<p class='popup-item'>Authority<b>"+ feature.properties.authority +"</b></p>"+
+        "<p class='popup-item'>Material<b>"+ feature.properties.material +"</b></p>"+
+        "<p class='popup-item'>Contractor<b>"+ feature.properties.contractor +"</b></p>"+
+    "</div>"+
+    "</div>";
+    layer.bindPopup(popupContent);
+
+    layer.on("mouseover", function(e){
+
+    });
+
+    layer.on("mouseout", function(e) {
+
+    });
+}
 
 roads.addTo(map);
 
@@ -92,12 +112,19 @@ var wards = L.geoJson(null, {
             weight:0.5
         }
     },
-    onEachFeature:function(feature, layer) {
-        
-    }
+    onEachFeature:onEachWardFeature
 });
 
-wards.addTo(map);
+function onEachWardFeature(feature, layer) {
+    let popupContent = "<div class='popup-content'>"+
+    "<h5 class='popup-title'>"+ feature.properties.elec_area_field +"</h5>"+
+    "<div class='popup-body'>"+
+        "<p class='popup-item'>Local Authority<b>"+ feature.properties.local_auth +"</b></p>"+
+        "<p class='popup-item'>Contituency<b>"+ feature.properties.const_nam +"</b></p>"+
+    "</div>"+
+    "</div>";
+    layer.bindPopup(popupContent);
+}
 
 // municipality area
 var municipality = L.geoJson(null, {
@@ -108,9 +135,15 @@ var municipality = L.geoJson(null, {
         weight:1
     },
     onEachFeature:function(feature, layer) {
-        
+        let popupContent = "<div class='popup-content'>"+
+        "<h5 class='popup-title'>Municipality</h5>"+
+        "<div class='popup-body'>"+
+            "<p class='popup-item'>Eldoret Municipality</p>"+
+        "</div>"
+        "</div>";
+        layer.bindPopup(popupContent);
     }
-}).addTo(map);
+});
 
 // load the data
 let requests = [fetch("/roads"), fetch("/other_data")];
@@ -222,7 +255,7 @@ legendControl.onAdd = function(map) {
     div.innerHTML = '<button class="btn btn-block bg-light text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">'+
     'Legend</button>';
 
-   div.innerHTML += '<div id="collapseOne"></div>';
+   div.innerHTML += '<div class="collapse" id="collapseOne"></div>';
 
     return div;
 }
@@ -257,7 +290,7 @@ function updateVisual(value) {
     }
 }
 
-
+// update the legend with the corresponding visual type
 function updateLegend(value) {
     let legendContainer = document.getElementById("collapseOne");
    
@@ -279,6 +312,7 @@ function updateLegend(value) {
     legendContainer.innerHTML = legendContent;
 }
 
+// legend colors
 function getLegendContent(data, feature, field, value) {
     let legendContent = "";
     data.forEach(element => {
@@ -373,10 +407,13 @@ searchInput.addEventListener("input", function(e) {
     let value = e.target.value;
     if(value.length >= 2) {
         filterRoadSegment(value);
+    } else {
+        searchResult.innerHTML = "";
     }
 });
 
 function filterRoadSegment(query) {
+    // filter road matching the query
     let data = JSON.parse(JSON.stringify(roadsData));
     data.features = data.features.filter(feature => {
         let roadName = feature.properties.name;
@@ -384,6 +421,11 @@ function filterRoadSegment(query) {
             return feature;
         }
     });
+
+    // create list item
+    if(data.features.length > 10) {
+        data.features = data.features.slice(0,10);
+    }
 
     if(data.features.length > 0) {
         let docFragment = document.createDocumentFragment();
@@ -404,7 +446,7 @@ function filterRoadSegment(query) {
         searchResult.innerHTML = "";
         searchResult.append(docFragment);
     } else {
-        searchResult.innerHTML = "<p>No resutlt found</p>"
+        searchResult.innerHTML = "<p class='bg-light'>No result found</p>"
     }
 
 }
@@ -412,6 +454,7 @@ function filterRoadSegment(query) {
 function listEventListener(e) {
     let data = JSON.parse(JSON.stringify(roadsData));
 
+    // get target attrinute;
     let target = e.target;
     let roadPk = target.getAttribute("id");
     let name = target.getAttribute("data-name");
@@ -424,6 +467,7 @@ function listEventListener(e) {
     data.features = data.features.filter(feature => feature.properties.pk == roadPk);
     console.log(data);
 
+    // create a geojson with result
     let feature = L.geoJson(data, {
         style:function(feature) {
             return {

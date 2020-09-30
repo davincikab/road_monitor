@@ -19,3 +19,7 @@ body {
 .navbar-collapse {
     justify-content: center;
 }
+
+.nav-link:hover {
+    border-bottom: 1px solid var(--brand-color);
+}
