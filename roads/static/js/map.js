@@ -287,6 +287,10 @@ function updateVisual(value) {
             cartoDark.addTo(map);
             map.removeLayer(cartoLight);
         }
+    } else {
+        let legendContainer = document.getElementById("collapseOne");
+
+        legendContainer.innerHTML = "";
     }
 }
 
