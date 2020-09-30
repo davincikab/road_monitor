@@ -10,7 +10,7 @@
 <div class="container-fluid home">
     <div class="main-matter">
         <p>Roads, and means of transport, make a crucial contribution to economic development and growth and bring important social benefits.</p>
-        <a href="{}" class="btn btn-brand btn-lg">Explore</a>
+        <a href="{% url 'roads:map' %}" class="btn btn-brand btn-lg">Explore</a>
     </div>
 </div>
 <div class="container-fluid">
@@ -48,7 +48,78 @@
     </div>
 
     <h3 class="title text-center my-5">TESTIMONIALS</h3>
+    <div class="container">
+        <div class="testimonials">
+            <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <div class="jumbotron jumbotron-fluid">
+                        <div class="container">
+                          <!-- <h1 class="display-4">Fluid jumbotron</h1> -->
+                          <img src="{% static '/images/user.jpg' %}" class="img-thumbnail" alt="...">
+                          <blockquote class="blockquote">
+                            <p class="mb-0">{% lorem 1 %} </p>
+                            <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
+                          </blockquote>
+                        </div>
+                    </div>
+                     
+                  </div>
+                  <div class="carousel-item">
+                    <div class="jumbotron jumbotron-fluid">
+                        <div class="container">
+                          <!-- <h1 class="display-4">Fluid jumbotron</h1> -->
+                          <img src="{% static '/images/user-04.jpg' %}" class="img-thumbnail" alt="...">
+                          <blockquote class="blockquote">
+                            <p class="mb-0">{% lorem 1 %} </p>
+                            <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
+                          </blockquote>
+                        </div>
+                    </div>
+
+                    
+                  </div>
+                  <div class="carousel-item">
+                    <div class="jumbotron jumbotron-fluid">
+                        <div class="container">
+                          <!-- <h1 class="display-4">Fluid jumbotron</h1> -->
+                          <img src="{% static '/images/user1.png' %}" class="img-thumbnail" alt="...">
+                          <blockquote class="blockquote">
+                            <p class="mb-0">{% lorem 1 %} </p>
+                            <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
+                          </blockquote>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+    </div>
+
+    <h3 class="title text-center my-5">CONTACTS</h3>
+    <div class="container contacts">
+        <div class="row mb-4">
+            <div class="card">
+                <div class="card-body mx-2">
+                    <span><b class="text-brand">PHONE</b> roadmonitor@rms.com</span>
+                    <span><b class="text-brand">EMAIL</b> roadmonitor@rms.com</span>
+                    <span><b class="text-brand">ADDRESS</b> Along, Kenyatta Ave, Eldoret</span>
+                    <span><b class="text-brand">LOCATION</b> Langas, Eldoret</span>
+                </div>
+            </div>
+    
+            <div class="card">
+                <div class="card-body mx-2">
+                    <span><i class="fa fa-facebook text-brand"></i>Facebook</span>
+                    <span><i class="fa fa-twitter text-brand"></i>Twitter</span>
+                    <span><i class="fa fa-instagram text-brand"></i>Instagram</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+{% include './footer.html' %}
 {% endblock %}
 
 {% block javascript %}

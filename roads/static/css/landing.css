@@ -11,6 +11,14 @@
     margin: 0em 0.5em;
 }
 
+.navbar-nav {
+    background-color: var(--white);
+}
+
+.show .navbar-nav .nav-item .nav-link {
+    color: var(--gray) !important;
+}
+
 .nav-item .nav-link {
     color:var(--white) !important;
     padding:0em;
@@ -71,12 +79,90 @@
     font-weight: 700;
 }
 
+/* carousel */
+.img-thumbnail {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
 
+.jumbotron {
+    padding: 0;
+}
+
+.jumbotron .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+.blockquote p {
+    font-size: 0.8em;
+}
+
+/* contacts */
+.row {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.row .card  {
+    box-shadow: 2px 2px 0.4em var(--light-gray);
+    padding:1em 0.5em;
+    width: 90%;
+    margin:1em;
+    transition: all 0.3s;
+}
+
+.row .card:first-child {
+    transform:rotateZ(10deg);
+}
+
+.row .card:first-child:hover {
+    transform:rotateZ(0deg);
+}
+
+.row .card:last-child {
+    transform:rotateZ(10deg);
+}
+
+.row .card:last-child:hover {
+    transform:rotateZ(0deg);
+}
+
+.card .card-body {
+    transform:rotateZ(0deg);
+}
+
+.card-body span {
+    margin:0.5em 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+@media (min-width:50em) {
+    .navbar-nav {
+        background-color: transparent;
+    }
+    .row {
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+    }
+    .row .card  {
+        box-shadow: 2px 2px 0.4em var(--light-gray);
+        padding:1em 0.5em;
+        width: 40%;
+        margin:1em;
+        transition: all 0.3s;
+    }
+}
 /* timeline */
 .milestone {
-    background-color: #474e5d;
-    font-family: Helvetica, sans-serif;
-  }
+    background-color: var(--dark-gray);
+}
   
   /* The actual timeline (the vertical ruler) */
 .timeline {
@@ -113,7 +199,7 @@
     height: 25px;
     right: -12px;
     background-color: white;
-    border: 4px solid #FF9F55;
+    border: 4px solid var(--brand-color);
     top: 15px;
     border-radius: 50%;
     z-index: 1;
@@ -194,11 +280,11 @@
   
     /* Make sure all circles are at the same spot */
     .left::after, .right::after {
-    left: 15px;
+        left: 15px;
     }
     
     /* Make all right containers behave like the left ones */
     .right {
-    left: 0%;
+        left: 0%;
     }
   }

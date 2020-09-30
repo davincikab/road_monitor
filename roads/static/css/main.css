@@ -3,7 +3,9 @@
     --primary:#ec958c;
     --brand-cta:#ec958c;
     --gray:#555;
+    --dark-gray:#474e5d;
     --light-gray:#7e7e7e;
+    --extra-light-gray:#b4b4b4;
     --white:#fff;
 }
 
@@ -22,4 +24,12 @@ body {
 
 .nav-link:hover {
     border-bottom: 1px solid var(--brand-color);
+}
+
+.text-brand  {
+    color:var(--brand-color);
+}
+
+.bg-extra-light {
+    background-color: var(--extra-light-gray);
 }
