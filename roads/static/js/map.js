@@ -3,6 +3,8 @@ var filterSection = document.getElementById("filter-section");
 var materialSelect = document.getElementById("material-select");
 var contractorSelect = document.getElementById("contractor-select");
 var surfaceSelect = document.getElementById("surface-select");
+var searchInput = document.getElementById("search-input");
+var searchResult = document.getElementById("search-result");
 
 var roadsData;
 var contractors;
@@ -192,7 +194,7 @@ var baseLayer = {
     "Carto Dark": cartoDark
 };
 
-L.control.layers(baseLayer, overlay, {collapsed:false}).addTo(map);
+L.control.layers(baseLayer, overlay, {collapsed:true}).addTo(map);
 
 
 // Event listeners
@@ -365,3 +367,70 @@ customSelect.forEach(cs => {
 
     });
 });
+
+// Search 
+searchInput.addEventListener("input", function(e) {
+    let value = e.target.value;
+    if(value.length >= 2) {
+        filterRoadSegment(value);
+    }
+});
+
+function filterRoadSegment(query) {
+    let data = JSON.parse(JSON.stringify(roadsData));
+    data.features = data.features.filter(feature => {
+        let roadName = feature.properties.name;
+        if(roadName && roadName.toLowerCase().includes(query.toLowerCase()) ) {
+            return feature;
+        }
+    });
+
+    if(data.features.length > 0) {
+        let docFragment = document.createDocumentFragment();
+
+        data.features.forEach(feature => {
+            let listItem = document.createElement("li");
+            listItem.setAttribute("class", "list-group-item");
+            listItem.setAttribute("id", feature.properties.pk);
+            listItem.setAttribute("data-name", feature.properties.name);
+
+            listItem.innerHTML = feature.properties.name;
+
+            listItem.addEventListener("click", listEventListener);
+
+            docFragment.append(listItem);
+        });
+
+        searchResult.innerHTML = "";
+        searchResult.append(docFragment);
+    } else {
+        searchResult.innerHTML = "<p>No resutlt found</p>"
+    }
+
+}
+
+function listEventListener(e) {
+    let data = JSON.parse(JSON.stringify(roadsData));
+
+    let target = e.target;
+    let roadPk = target.getAttribute("id");
+    let name = target.getAttribute("data-name");
+
+    // update search input value
+    searchInput.value = name;
+    searchResult.innerHTML = "";
+
+    // zoom to road layer
+    data.features = data.features.filter(feature => feature.properties.pk == roadPk);
+    console.log(data);
+
+    let feature = L.geoJson(data, {
+        style:function(feature) {
+            return {
+                color:"#c7f709",
+                weight:4
+            }
+        }
+    }).addTo(map);
+    map.fitBounds(feature.getBounds());
+}

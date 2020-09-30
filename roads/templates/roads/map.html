@@ -9,9 +9,18 @@
 
 {% block content %}
 <div class="map" id="map">
+    <div class="search-section">
+        <input type="text" class="form-control form-control-sm" id="search-input" name="search" placeholder="Search Road Name ..">
+
+        <div class="search-result">
+            <ul class="list-group list-group-sm" id="search-result">
+            </ul>
+        </div>
+    </div>
+
     <div class="filter-section py-2 px-2" id="filter-section">
         <span class="btn-close" id="btn-close">&times;</span>
-        <h5>Visual Type</h5>
+        <h5 class="title-section">Visual Type</h5>
         <div class="section-viusal py-2 px-2" id="secton-visual">
             <div class="form-group d-flex">
                 <input class="form-check" type="radio" name="visual" id="material" checked value="default">
@@ -48,9 +57,9 @@
             </div>
         </div>
 
-        <h5>Filter</h5>
+        <h5 class="title-filter">Filter</h5>
         <div class="section-filter" id="secton-filter">
-            <div class="form-row mb-2">
+            <div class="form-row mb-2 pl-3">
                 <div class="col">
                     <input type="radio" class="form-check" name="progress"  value="all" id="all">
                     <label for="all">All</label>
