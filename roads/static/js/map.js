@@ -1,6 +1,10 @@
 var closeFilterButton = document.getElementById("btn-close");
 var filterSection = document.getElementById("filter-section");
+var materialSelect = document.getElementById("material-select");
+var contractorSelect = document.getElementById("contractor-select");
+var surfaceSelect = document.getElementById("surface-select");
 
+var roadsData;
 var contractors;
 var materials;
 var structure;
@@ -116,6 +120,17 @@ fetch("/roads")
 
     return response.json()
 }).then(road => {
+    // add year column
+    road.features.forEach(feature => {
+        if(feature.properties.constructi) {
+            feature.properties.year = feature.properties.constructi.split(",")[1]
+        }
+        
+        return feature;
+    });
+
+    roadsData = road;
+
     console.log(road);
     roads.addData(road);
 
@@ -123,6 +138,10 @@ fetch("/roads")
     surface = getUniqueValues(road, "surface");
     structure = getUniqueValues(road, "road_struc");
     contractors = getUniqueValues(road, "contractor");
+
+    updateSelectElement(materials, materialSelect);
+    updateSelectElement(surface, surfaceSelect);
+    updateSelectElement(contractors, contractorSelect);
 })
 .catch(error => {
     console.log(error);
@@ -150,6 +169,15 @@ function getUniqueValues(data, field) {
     newData = [...new Set(newData)];
 
     return newData;
+}
+
+function updateSelectElement(data, element) {
+    element.innerHTML = "";
+    element.innerHTML += "<option value='all'>All ...</option>";
+
+    data.forEach(entry => {
+        element.innerHTML += "<option value='"+ entry +"'>"+ entry +"</option>";
+    });
 }
 
 // layer control
@@ -192,8 +220,7 @@ legendControl.onAdd = function(map) {
     div.innerHTML = '<button class="btn btn-block bg-light text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">'+
     'Legend</button>';
 
-   div.innerHTML += '<div id="collapseOne">'+
-   'Anim pariatur cliche reprehenderit</div>';
+   div.innerHTML += '<div id="collapseOne"></div>';
 
     return div;
 }
@@ -256,17 +283,11 @@ function getLegendContent(data, feature, field, value) {
         feature.properties[field] = element;
         let color = getRoadColor(value, feature);
 
-        legendContent += "<div class='legend-item' style='background-color:"+color+"'></div><span>"+element+"</span>";
+        legendContent += "<div class='legend_wrapper'><div class='legend-item' style='background-color:"+color+"'></div><span>"+element+"</span></div>";
     });
 
     return legendContent;
 }
-
-function toggleLegend() {
-        
-}
-
-// Animate roads
 
 // Filter Section
 var filterControl = new L.Control({position:"topleft"});
@@ -289,4 +310,58 @@ filterControl.addTo(map);
 closeFilterButton.addEventListener("click", function(e) {
     filterSection.classList.toggle("collapse-filter");
     filterControl.addTo(map);
+});
+
+
+// Filter data
+var progessButtons = document.querySelectorAll(".col .form-check");
+progessButtons.forEach(progressButton => {
+    progressButton.addEventListener("change", function(e) {
+        let value = e.target.value;
+        let currentYear = new Date().getFullYear();
+
+        let data = JSON.parse(JSON.stringify(roadsData));
+        roads.clearLayers();
+        if(value == "completed") {
+            data.features = data.features.filter(feature => feature.properties.year <= currentYear);
+            roads.addData(data);
+        } else if (value == "all") {
+            roads.addData(data);
+        } 
+        else {
+            data.features = data.features.filter(feature => feature.properties.year >= currentYear);
+            roads.addData(data);
+        }
+    });
+});
+
+// select filters
+var customSelect = document.querySelectorAll(".custom-select");
+
+customSelect.forEach(cs => {
+    cs.addEventListener("change", function(e) {
+        let value = e.target.value;
+        let name = e.target.name;
+
+        roads.clearLayers();
+        let data = JSON.parse(JSON.stringify(roadsData));
+
+        if(value == "all") {
+            roads.addData(data);
+            return;
+        }
+        // filter accordingly
+        if(name == "contractor") {
+            data.features = data.features.filter(feature => feature.properties.contractor == value);
+        } else if (name == "material") {
+            data.features = data.features.filter(feature => feature.properties.material == value);
+        } else if ( name == "surface") {
+            data.features = data.features.filter(feature => feature.properties.surface == value);
+        } else {
+
+        }
+
+        roads.addData(data);
+
+    });
 });

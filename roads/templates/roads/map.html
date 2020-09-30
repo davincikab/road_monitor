@@ -52,48 +52,41 @@
         <div class="section-filter" id="secton-filter">
             <div class="form-row mb-2">
                 <div class="col">
-                  <input type="radio" class="form-check" name="progress"  id="completed" placeholder="First name">
+                    <input type="radio" class="form-check" name="progress"  value="all" id="all">
+                    <label for="all">All</label>
+                  </div>
+
+                <div class="col">
+                  <input type="radio" class="form-check" name="progress"  value="completed" id="completed">
                   <label for="">Completed</label>
                 </div>
                 <div class="col">
-                  <input type="radio" class="form-check" name="progress" id="ongoing" placeholder="Last name">
+                  <input type="radio" class="form-check" name="progress" value="ongoing" id="ongoing" placeholder="Last name">
                   <label for="">Ongoing</label>
                 </div>
             </div>
 
             <div class="input-group  input-group-sm mb-3">
                 <div class="input-group-prepend">
-                  <label class="input-group-text" for="inputGroupSelect01">Material</label>
+                  <label class="input-group-text" for="material-select">Material</label>
                 </div>
-                <select class="custom-select" id="material" name="material">
-                  <option selected>Choose...</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                <select class="custom-select" id="material-select" name="material">
                 </select>
             </div>
 
             <div class="input-group  input-group-sm mb-3">
                 <div class="input-group-prepend">
-                  <label class="input-group-text" for="contractor">Contractor</label>
+                  <label class="input-group-text" for="contractor-select">Contractor</label>
                 </div>
-                <select class="custom-select" id="contractor">
-                  <option selected>Choose...</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                <select class="custom-select" id="contractor-select" name="contractor">
                 </select>
             </div>
 
             <div class="input-group  input-group-sm mb-3">
                 <div class="input-group-prepend">
-                  <label class="input-group-text" for="inputGroupSelect01">Surface</label>
+                  <label class="input-group-text" for="surface-select">Surface</label>
                 </div>
-                <select class="custom-select" id="inputGroupSelect01">
-                  <option selected>Choose...</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                <select class="custom-select" id="surface-select" name="surface">
                 </select>
             </div>
         </div>
