@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load road_tags %}
+{% load static %}
+{% block title %} Profile {% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h5>User Profile</h5>
+{% endblock %}
+{% block javascript %}
+<script src="{% static 'js/addControlClass.js' %}"></script>
+{% endblock %}

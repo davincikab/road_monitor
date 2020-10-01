@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load road_tags %}
+{% load static %}
+{% block title %} Profile {% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<form class="" action="" method="post">
+    {% csrf_token %}
+      {{ form }}
+      <input type="submit" name="Login" value="Login" class="btn btn-success mt-2">
+</form>
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'js/addControlClass.js' %}"></script>
+{% endblock %}

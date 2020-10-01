@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.db.models import Count, Sum
 from django.contrib.gis.db.models.functions import Length
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # template 
 from django.views.generic.base import TemplateView
@@ -42,7 +43,7 @@ class MapView(TemplateView):
         # context["data"] = roads_data(self.request)
         return context
 
-class DashboardView(TemplateView):
+class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = "roads/dashboard.html"
 
     def get_context_data(self, **kwargs):

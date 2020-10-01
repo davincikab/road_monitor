@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from PIL import Image
 
 # Create your models here.
-class customUserProfile(models.Model):
+class UserProfile(models.Model):
     EMPLOYEE_CATEGORY = (
         ("EN", "Engineer"),
         ("MD", "Director"),
@@ -33,10 +33,10 @@ class customUserProfile(models.Model):
     #     return reverse("_detail", kwargs={"pk": self.pk})
 
     def save(self,*args, **kwargs):
-        super().save( **args, **kwargs)
+        super().save(*args, **kwargs)
 
         size = (300, 300)
         img = Image(self.profile_pic.path)
         if img.height >300 or img.width >300:
-             im.thumbnail(size)
+             img.thumbnail(size)
              img.save(self.profile_pic.path)
