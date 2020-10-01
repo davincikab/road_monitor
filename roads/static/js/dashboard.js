@@ -178,3 +178,10 @@ function cleanAndSort(data, field) {
 
     return [years, values]
 }
+
+// filter 
+let contractorsData = document.getElementById("contractors").innerHTML;
+
+// clean the string an create an array
+contractorsData = contractorsData.trim().toString().slice(13, -4);
+console.log(contractorsData);

@@ -72,9 +72,11 @@
         <div class="row">
             <div class="col-md-6 contractor">
                 <div class="search-bar">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Contractor Name ..." name="contractor">
-                    </div>
+                    <form action="">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Contractor Name ..." name="query">
+                        </div>
+                    </form>
                 </div>
                 <ul class="list-group">
                     {% for contractor in contractors %}
@@ -84,6 +86,10 @@
                         </li>
                     {% endfor %}
                 </ul>
+
+                <div class="d-none" id="contractors">
+                    {{ contractors }}
+                </div>
             </div>
             
             <div class="col-md-6">
