@@ -30,6 +30,16 @@ body {
     color:var(--brand-color);
 }
 
+.btn-cta {
+    background-color: var(--brand-cta) !important;
+    color: var(--white);
+}
+
+.btn-cta:hover, .btn-cta:focus {
+    background-color: var(--brand-color) !important;
+    color: white;
+}
+
 .btn-brand {
     background-color: var(--brand-cta) !important;
     color: var(--white);
