@@ -8,7 +8,18 @@
 {% endblock %}
 
 {% block content %}
-    <h5>User Profile</h5>
+    <a href="{% url 'user:create-profile' %}" class="btn btn-brand">Update Profile </a>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <img src="{{ profile.profile_pic.url }}" alt="">
+            </div>
+            <div class="col-md-6">
+                <h5>{{ profile.department }}</h5>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 {% block javascript %}
 <script src="{% static 'js/addControlClass.js' %}"></script>

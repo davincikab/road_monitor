@@ -10,7 +10,7 @@ class UserProfile(models.Model):
         ("SU", "Surveyor")
     )
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     id_number = models.CharField("ID Number", max_length=13)
     profile_pic = models.ImageField("Profile Picture", default="user3.jpg", upload_to="uploads")
     employee_status = models.CharField("Employee Category", choices=EMPLOYEE_CATEGORY, max_length=50)
@@ -36,7 +36,7 @@ class UserProfile(models.Model):
         super().save(*args, **kwargs)
 
         size = (300, 300)
-        img = Image(self.profile_pic.path)
-        if img.height >300 or img.width >300:
+        img = Image.open(self.profile_pic.path)
+        if img.height > 300 or img.width > 300:
              img.thumbnail(size)
              img.save(self.profile_pic.path)

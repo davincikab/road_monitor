@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -13,10 +14,21 @@ class ProfileCreateView(LoginRequiredMixin, FormView):
     template_name = "user/create_profile.html"
     success_url = "/user/profile/"
 
+    # def get_initial(self):
+    #     profile = UserProfile.objects.get(user=self.request.user)
+    #     return profile
+
     def form_valid(self, form):
         profile = form.save(commit = False)
         profile.user = self.request.user
+        print('Invalid')
+
+        profile.save()
         return redirect(self.success_url)
+    
+    def form_invalid(self, form):
+        print(form.errors)
+        return HttpResponse("Invalid data")
 
 
 class UserCreateView(FormView):
@@ -35,7 +47,7 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # context["profile"] = UserProfile.objects.filter(user = self.request.user)
+        context["profile"] = UserProfile.objects.get(user = self.request.user)
         return context
     
 

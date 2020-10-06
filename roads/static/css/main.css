@@ -30,6 +30,17 @@ body {
     color:var(--brand-color);
 }
 
+.btn-brand {
+    background-color: var(--brand-cta) !important;
+    color: var(--white);
+    transition: all 0.3s;
+}
+
+.btn-brand:hover {
+    color: white;
+    transform: scale(1.2);
+}
+
 .bg-extra-light {
     background-color: var(--extra-light-gray);
 }
