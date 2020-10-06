@@ -183,5 +183,59 @@ function cleanAndSort(data, field) {
 let contractorsData = document.getElementById("contractors").innerHTML;
 
 // clean the string an create an array
-contractorsData = contractorsData.trim().toString().slice(13, -4);
-console.log(contractorsData);
+let cleanData = contractorsData.trim().slice(13, -4).replaceAll("'", "\"");
+cleanData = cleanData.replace("None", "\"None\"");
+cleanData = JSON.parse(cleanData, function(key, value) {
+    return value;
+});
+
+var contractorList = document.getElementById("contrators-list");
+var formContractor = document.getElementById("search-contractor");
+
+formContractor.addEventListener("input", function(e) {
+    let value = e.target.value;
+    console.log(value);
+
+    if(value) {
+        filterContractors(value);
+    } else {
+        updateListElements(cleanData);
+    }
+});
+
+function filterContractors(value) {
+    let contractors = JSON.parse(JSON.stringify(cleanData));
+    contractors = contractors.filter(contractor => {
+        if(
+            contractor.contractor.toLowerCase().includes(value.toLowerCase())
+        ) {
+            return contractor
+        }
+    });
+
+    console.log(contractors);
+
+    if(contractors.length == 0) {
+        contractorList.innerHTML = "No result found";
+        return;
+    } 
+
+    updateListElements(contractors);
+
+    
+}
+
+
+function updateListElements(contractors) {
+    let innerText = "";
+    contractors.forEach(contractor => {
+        innerText += `<li class="list-group-item d-flex justify-content-between align-items-center">
+            ${ contractor.contractor.slice(0,1).toUpperCase() + contractor.contractor.slice(1,).toLowerCase() }
+            <span class="badge badge-brand badge-pill">${contractor.contracts_count}</span>
+        </li>`
+    });
+
+    // update the list group element
+    contractorList.innerHTML = innerText;
+}
+
