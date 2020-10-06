@@ -17,6 +17,10 @@
     left: 12%;
 }
 
+.search-result {
+    cursor: pointer;
+}
+
 .filter-section {
     position: absolute;
     height: 100vh;
@@ -99,7 +103,7 @@
 
 .leaflet-popup-content-wrapper .leaflet-popup-content {
     margin:0;
-    min-width: 200px;
+    min-width: 240px;
 }
 
 .popup-content {

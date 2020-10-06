@@ -5,23 +5,33 @@ from django.views.generic.edit import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.contrib.auth.models import User
+from django.forms.models import model_to_dict
+
 from .forms import UserCreateForm, ProfileForm
 from .models import UserProfile
 
+
+
 class ProfileCreateView(LoginRequiredMixin, FormView):
+    login_url = "/user/login/"
     model = UserProfile
     form_class = ProfileForm
     template_name = "user/create_profile.html"
-    success_url = "/user/profile/"
+    success_url = "/user/account/"
 
-    # def get_initial(self):
-    #     profile = UserProfile.objects.get(user=self.request.user)
-    #     return profile
+    def get_initial(self):
+        try:
+            profile = UserProfile.objects.get(user=self.request.user)
+            profile = model_to_dict(profile)
+        except UserProfile.DoesNotExist:
+            profile = {}
+        
+        return profile
 
     def form_valid(self, form):
-        profile = form.save(commit = False)
+        profile = form.save(commit=False)
         profile.user = self.request.user
-        print('Invalid')
+        print('Valid')
 
         profile.save()
         return redirect(self.success_url)
@@ -43,11 +53,17 @@ class UserCreateView(FormView):
 
 
 class ProfileView(LoginRequiredMixin, TemplateView):
+    login_url = '/user/login/' 
     template_name = "user/user_profile.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["profile"] = UserProfile.objects.get(user = self.request.user)
+        try:
+            context["profile"] = UserProfile.objects.get(user = self.request.user)
+        except UserProfile.DoesNotExist:
+            context["profile"] = {}
+        
+        print(context['profile'])
         return context
     
 

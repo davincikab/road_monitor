@@ -5,8 +5,8 @@ from django.conf import settings
 from django.dispatch import receiver
 
 @receiver(post_save, sender=User)
-def create_user(sender, instance, created, **kwargs):
-    if created:
+def create_user(sender, instance, **kwargs):
+    if instance:
       UserProfile.objects.create(user=instance)
 
 @receiver(post_save, sender=User)

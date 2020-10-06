@@ -12,7 +12,7 @@ class UserProfile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     id_number = models.CharField("ID Number", max_length=13)
-    profile_pic = models.ImageField("Profile Picture", default="user3.jpg", upload_to="uploads")
+    profile_pic = models.ImageField("Profile Picture", default="user3.png", upload_to="uploads")
     employee_status = models.CharField("Employee Category", choices=EMPLOYEE_CATEGORY, max_length=50)
     phone_number = models.CharField("Phone Number", max_length=15)
     department = models.CharField("Department", max_length=50)

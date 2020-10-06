@@ -44,6 +44,7 @@ class MapView(TemplateView):
         return context
 
 class DashboardView(LoginRequiredMixin, TemplateView):
+    login_url = "/user/login/"
     template_name = "roads/dashboard.html"
 
     def get_context_data(self, **kwargs):

@@ -41,6 +41,12 @@ body {
     transform: scale(1.2);
 }
 
+.img-thumbnail {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+
 .bg-extra-light {
     background-color: var(--extra-light-gray);
 }
