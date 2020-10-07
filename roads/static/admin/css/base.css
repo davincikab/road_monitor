@@ -8,6 +8,17 @@ html, body {
     height: 100%;
 }
 
+:root {
+    --brand-color:#ec877b;
+    --primary:#ec958c;
+    --brand-cta:#ec958c;
+    --gray:#555;
+    --dark-gray:#474e5d;
+    --light-gray:#7e7e7e;
+    --extra-light-gray:#b4b4b4;
+    --white:#fff;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -20,7 +31,7 @@ body {
 /* LINKS */
 
 a:link, a:visited {
-    color: #447e9b;
+    color: var(--brand-color);
     text-decoration: none;
 }
 
@@ -352,7 +363,7 @@ table thead th.sorted .sortoptions a.sortremove:after {
 
 table thead th.sorted .sortoptions a.sortremove:focus:after,
 table thead th.sorted .sortoptions a.sortremove:hover:after {
-    color: #447e9b;
+    color: var(--brand-color);
 }
 
 table thead th.sorted .sortoptions a.sortremove:focus,
@@ -450,7 +461,7 @@ a.button {
     float: right;
     border: none;
     font-weight: 400;
-    background: #417690;
+    background: var(--brand-color);
 }
 
 .button.default:active, input[type=submit].default:active,
@@ -698,7 +709,7 @@ a.deletelink:focus, a.deletelink:hover {
 }
 
 .object-tools a:focus, .object-tools a:hover {
-    background-color: #417690;
+    background-color: var(--brand-color);
 }
 
 .object-tools a:focus{
@@ -813,7 +824,7 @@ table#change-history tbody th {
     justify-content: space-between;
     align-items: center;
     padding: 10px 40px;
-    background: #417690;
+    background-color: var(--brand-color);
     color: #ffc;
     overflow: hidden;
 }
