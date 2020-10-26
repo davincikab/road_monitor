@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Road Report {% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'leaflet/leaflet.css' %}">
+    <link rel="stylesheet" href="{% static 'css/map.css' %}">
+    <link rel="stylesheet" href="{% static 'css/road_report.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="map" id="map">
+
+</div>
+<!-- modals -->
+<!-- prompt modal: geolocation -->
+<div class="modal" tabindex="-1" id="geolocate-prompt">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <p>Set my Location</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal" id="dismiss-location">Cancel</button>
+          <button type="button" class="btn btn-sm btn-primary" id="confirm-location">Set as My Location</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!-- user location  -->
+<div class="modal" tabindex="-1" id="user-location-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+            <p class="text-center">Report My Location</p>
+
+            <div class="btn-group">
+                <button class="btn btn-cta my-2" id="take-snap">Snap</button>
+                <button class="btn btn-cta my-2" id="stop-snap">Start</button>
+                <button class="btn btn-cta my-2" id="flip-snap">Flip</button>
+            </div>
+           
+
+            <div class="cam">
+                <video id="webcam" autoplay playsinline width="200" height="200"></video>
+                <canvas id="canvas" class="d-none"></canvas>
+                <audio id="snapSound" src="audio/snap.wav" preload = "auto"></audio>
+            </div>
+           
+
+            <img src="" id="download-photo" class="img">
+            <form action="" method="post" id="road-condition-form" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form }}
+                <small class="text-danger" id="error-message"></small>
+                <div class="form-group mt-2">
+                    <button type="submit" class="btn btn-sm btn-success" id="confirm-location">Submit</button>
+                    <button type="button" class="btn btn-sm btn-warning ml-2" data-dismiss="modal" id="dismiss-location">Cancel</button>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+    <script src="{% static 'js/addControlClass.js'%}"></script>
+    <script src="{% static 'leaflet/leaflet.js'%}"></script>
+    <script type="text/javascript" src="https://unpkg.com/webcam-easy/dist/webcam-easy.min.js"></script>
+    <script src="{% static 'js/road_report.js'%}"></script>
+{% endblock %}

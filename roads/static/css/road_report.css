@@ -1,0 +1,11 @@
+#map {
+    width:100%;
+}
+
+.modal {
+    /* display: flex !important; */
+}
+
+.modal-dialog {
+    min-width: 50%;
+}

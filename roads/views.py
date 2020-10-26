@@ -1,19 +1,24 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.db.models import Count, Sum
 from django.contrib.gis.db.models.functions import Length
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.files.base import ContentFile
+from django.utils.text import slugify
 
 # template 
 from django.views.generic.base import TemplateView
 
 # serializer
 from django.core.serializers import serialize
+from django.contrib.gis.geos import GEOSGeometry
 
 #models
 from .models import Wards, Road, Municipality
+from .forms import RoadReportForm
 
 # utils
+import base64
 import json
 from functools import reduce
 
@@ -85,4 +90,34 @@ def roads_data(request):
 
     # serializer
     return HttpResponse(data)
+
+
+
+# report road condition
+def report_road_condition(request):
+    if request.method == "POST":
+        # print(request.POST)
+        form = RoadReportForm(request.POST)
+
+        if form.is_valid():
+            geom = request.POST.get('geom')
+            report = form.save(commit=False)
+            report.geom = GEOSGeometry(f'POINT ({geom})')
+
+            image_data = request.POST.get('image-data')
+            image_format, imgstr = image_data.split(';base64,')
+            ext = image_format.split('/')[-1]
+            image_name = slugify(report.title) + '.' + ext
+
+            report.image.save(image_name, ContentFile(base64.b64decode(imgstr)), save=True)
+
+            report.save()
+
+            return JsonResponse({'message':"success"})
+        else:
+            return JsonResponse({'errors':form.errors})
+    else:
+        form = RoadReportForm()
+    
+    return render(request, 'roads/road_report.html',{'form':form})
 

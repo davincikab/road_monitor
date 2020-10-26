@@ -171,6 +171,11 @@ label {
     font-size: 1.1em;
 }
 
+.btn-block {
+    display: flex;
+    justify-content: space-between;
+}
+
 .form-group, .col {
     display: flex;
     align-items: center;

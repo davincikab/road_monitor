@@ -1,5 +1,5 @@
 from django.contrib.gis.db import models
-
+from django.utils.text import slugify
 
 class Municipality(models.Model):
     fid = models.IntegerField(primary_key=True)
@@ -62,3 +62,33 @@ class Wards(models.Model):
     class Meta:
         managed = False
         db_table = 'wards'
+
+class RoadReport(models.Model):
+    REPORT_TYPE = (
+        ("BP", "Bump"),
+        ("RD", "Road Sign"),
+        ("PH", "PotHoles"),
+        ("DG", "Drainage"),
+    )
+
+    title = models.CharField("Title", max_length=50)
+    slug = models.SlugField(max_length=200, blank=True)
+    report_type = models.CharField("Report Type", choices=REPORT_TYPE, max_length=50)
+    description = models.TextField("Description", blank=True)
+    geom = models.PointField()
+    date = models.DateField("Reported On", auto_now=True)
+    image = models.ImageField("Condition Media", upload_to="reports", blank=False)
+
+    class Meta:
+        verbose_name = "RoadReport"
+        verbose_name_plural = "RoadReports"
+
+    def __str__(self):
+        return self.name
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+    # def get_absolute_url(self):
+    #     return reverse("_detail", kwargs={"pk": self.pk})
