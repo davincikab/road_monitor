@@ -41,15 +41,18 @@
                 <button class="btn btn-cta my-2" id="flip-snap">Flip</button>
             </div>
            
-
-            <div class="cam">
+            
+            <div class="d-flex cam-section">
+              <div class="cam">
                 <video id="webcam" autoplay playsinline width="200" height="200"></video>
                 <canvas id="canvas" class="d-none"></canvas>
                 <audio id="snapSound" src="audio/snap.wav" preload = "auto"></audio>
-            </div>
-           
+              </div>
+            
 
-            <img src="" id="download-photo" class="img">
+              <img src="" id="download-photo" class="img">
+            </div>
+            
             <form action="" method="post" id="road-condition-form" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form }}

@@ -171,10 +171,10 @@ function toggleSnap() {
      // toggle cam 
      if(stopSnapButton.text()  == "start") {
         webcam.stop();
-        stopSnapButton.text("stop")
+        stopSnapButton.text("start")
     } else {
         webcam.start();
-        stopSnapButton.text("start")
+        stopSnapButton.text("stop")
     }
 }
 
