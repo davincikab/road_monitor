@@ -85,7 +85,7 @@ class RoadReport(models.Model):
         verbose_name_plural = "RoadReports"
 
     def __str__(self):
-        return self.name
+        return self.title
     
     def save(self, *args, **kwargs):
         if not self.slug:

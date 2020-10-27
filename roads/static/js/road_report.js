@@ -51,7 +51,7 @@ var issueNotResolvedIcon = L.icon({
 
 var reportedIssues = L.geoJSON(null, {
     onEachFeature:function(feature, layer) {
-        let bgColor = feature.properties.issue_resolved ? "bg-success" : "bg-danger";
+        let bgColor = feature.properties.is_resolved ? "bg-success" : "bg-danger";
 
         let popupContent = "<div class='popup-content'>"+
             "<h5 class='popup-title "+ bgColor +"'>"+ feature.properties.title+"</h5>"+
@@ -64,7 +64,7 @@ var reportedIssues = L.geoJSON(null, {
         layer.bindPopup(popupContent);
     },
     pointToLayer:function(feature, latlng) {
-        if(feature.properties.issue_resolved) {
+        if(feature.properties.is_resolved) {
             return L.marker(latlng, {icon:issueResolvedIcon});
         }
 
