@@ -14,7 +14,7 @@ from django.core.serializers import serialize
 from django.contrib.gis.geos import GEOSGeometry
 
 #models
-from .models import Wards, Road, Municipality
+from .models import Wards, Road, Municipality, RoadReport
 from .forms import RoadReportForm
 
 # utils
@@ -121,3 +121,12 @@ def report_road_condition(request):
     
     return render(request, 'roads/road_report.html',{'form':form})
 
+
+# request points
+def get_report_data(request):
+    road_reports = serialize('geojson', RoadReport.objects.all())
+    return HttpResponse(road_reports)
+
+
+# Update to work with Django Rest Framework
+# Update the dashboard

@@ -78,6 +78,7 @@ class RoadReport(models.Model):
     geom = models.PointField()
     date = models.DateField("Reported On", auto_now=True)
     image = models.ImageField("Condition Media", upload_to="reports", blank=False)
+    is_resolved = models.BooleanField("Resolved Report", default=False)
 
     class Meta:
         verbose_name = "RoadReport"

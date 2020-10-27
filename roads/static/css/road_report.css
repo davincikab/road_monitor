@@ -9,3 +9,8 @@
 .modal-dialog {
     min-width: 50%;
 }
+
+.img-popup {
+    width: 100%;
+    object-fit: cover;
+}

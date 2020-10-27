@@ -36,6 +36,58 @@ map.on('click', function(e) {
    
 });
 
+// load report data
+var issueResolvedIcon = L.icon({
+    iconUrl:"/static/images/green.png",
+    iconSize:[30, 55],
+    popupAnchor:[-3, -30]
+});
+
+var issueNotResolvedIcon = L.icon({
+    iconUrl:"/static/images/red.png",
+    iconSize:[30, 55],
+    popupAnchor:[-3, -30]
+});
+
+var reportedIssues = L.geoJSON(null, {
+    onEachFeature:function(feature, layer) {
+        let bgColor = feature.properties.issue_resolved ? "bg-success" : "bg-danger";
+
+        let popupContent = "<div class='popup-content'>"+
+            "<h5 class='popup-title "+ bgColor +"'>"+ feature.properties.title+"</h5>"+
+            "<div class='popup-body'>"+
+                "<p class='popup-item'>Report Type<b>"+ feature.properties.report_type +"</b></p>"+
+                "<p class='popup-item'>Reported On<b>"+ feature.properties.date +"</b></p>"+
+                "<img class='img-popup mb-2' src='/media/"+ feature.properties.image +"'>"+
+            "</div>"+
+            "</div>";
+        layer.bindPopup(popupContent);
+    },
+    pointToLayer:function(feature, latlng) {
+        if(feature.properties.issue_resolved) {
+            return L.marker(latlng, {icon:issueResolvedIcon});
+        }
+
+        return L.marker(latlng, {icon:issueNotResolvedIcon});
+    }
+});
+
+reportedIssues.addTo(map);
+
+function loadReportData() {
+    fetch("/road_report_data/")
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        reportedIssues.addData(data);
+    })
+    .catch(error => {
+        console.error(error);
+    })
+}
+
+loadReportData();
+
 // Geolocation control
 var geolocationControl = new L.Control({position:'topleft'});
 geolocationControl.onAdd = function(map) {
@@ -161,7 +213,7 @@ roadCondtionForm.on("submit", function(e) {
             userLocationModal.modal('hide');
             roadConditionFormElement.reset();
 
-
+            loadReportData();
             // update snackbar message
         //    snackbar.addClass('open');
         //    snackbar.text("Successfully reported your location")
@@ -183,3 +235,9 @@ $('#dismiss-location').on('click', function(e) {
 });
 
 
+// TODO: 
+/*
+    WORK CUSTOM MARKERS FOR EACH TYPE
+    ANIMATE REPORT DATE
+
+*/
