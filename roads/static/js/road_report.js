@@ -25,6 +25,7 @@ var roadConditionFormElement = document.querySelector("#road-condition-form");
 var confirmUserLocationButton = $("#confirm-location");
 var dismissUserLocationButton = $("#dismiss-location");
 var imageData = null;
+var userLocationMarker;
 
 map.on('click', function(e) {
     console.log(e);
@@ -32,6 +33,7 @@ map.on('click', function(e) {
          // prompt the user to set as their location
         geolocateModal.modal('show');
         myLocation = e.latlng;
+        userLocationMarker = L.marker(e.latlng).addTo(map);
     }
    
 });
@@ -121,6 +123,14 @@ function triggerGeolocation() {
 map.on("locationfound", function(e) {
     // update myLocation
     myLocation = e.latlng;
+
+    userLocationMarker = L.marker(e.latlng).addTo(map);
+
+    // open the modal
+    setTimeout(function(e) {
+        userLocationModal.modal("show");
+    }, 2000);
+    
 });
 
 map.on("locationerror" , function(e) {
@@ -158,9 +168,15 @@ takeSnapButton.on("click", function(e) {
 
 function takeSnap() {
     let picture = webcam.snap();
+
     console.log("Snapshot");
     document.querySelector('#download-photo').src = picture;
     imageData = picture;
+
+    $('#download-photo').toggleClass("d-none");
+
+    // nn
+    toggleSnap();
 }
 
 stopSnapButton.on("click", function(e) {
@@ -168,18 +184,27 @@ stopSnapButton.on("click", function(e) {
 });
 
 function toggleSnap() {
+    console.log(stopSnapButton.text());
      // toggle cam 
-     if(stopSnapButton.text()  == "start") {
+     if(stopSnapButton.text()  == "stop") {
         webcam.stop();
-        stopSnapButton.text("start")
+        stopSnapButton.text("start");
+
+        // 
+       
     } else {
         webcam.start();
-        stopSnapButton.text("stop")
+        stopSnapButton.text("stop");
+        $('#download-photo').toggleClass("d-none");
     }
+
+    $('.cam').toggleClass('d-none');
+
 }
 
-flipSnapButton.on("flip", function(e) {
+flipSnapButton.on("click", function(e) {
     webcam.flip();
+    webcam.start();
 });
 
 // commit the data to db
@@ -214,6 +239,9 @@ roadCondtionForm.on("submit", function(e) {
             roadConditionFormElement.reset();
 
             loadReportData();
+            userLocationMarker.remove();
+            userLocationMarker = null;
+            isgeolocateByMapClick = false
             // update snackbar message
         //    snackbar.addClass('open');
         //    snackbar.text("Successfully reported your location")
@@ -221,6 +249,8 @@ roadCondtionForm.on("submit", function(e) {
             console.error(res.errors);
             $('error-message').text("");
         }
+
+        toggleSnap();
     })
     .catch(error => {
         console.error(error);
@@ -232,6 +262,7 @@ $('#dismiss-location').on('click', function(e) {
     myLocation = null;
 
     userLocationModal.modal('hide');
+    userLocationMarker.remove();
 });
 
 
@@ -239,5 +270,6 @@ $('#dismiss-location').on('click', function(e) {
 /*
     WORK CUSTOM MARKERS FOR EACH TYPE
     ANIMATE REPORT DATE
-
+    
+    CAMERA AND THE MODAL behaviour on mobile phone.
 */
