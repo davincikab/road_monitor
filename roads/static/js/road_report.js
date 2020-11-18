@@ -173,7 +173,7 @@ function takeSnap() {
     document.querySelector('#download-photo').src = picture;
     imageData = picture;
 
-    $('#download-photo').toggleClass("d-none");
+    $('#download-photo').removeClass("d-none");
 
     // nn
     toggleSnap();
@@ -195,7 +195,7 @@ function toggleSnap() {
     } else {
         webcam.start();
         stopSnapButton.text("stop");
-        $('#download-photo').toggleClass("d-none");
+        $('#download-photo').addClass("d-none");
     }
 
     $('.cam').toggleClass('d-none');
