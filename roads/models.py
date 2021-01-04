@@ -63,12 +63,88 @@ class Wards(models.Model):
         managed = False
         db_table = 'wards'
 
+# Roads models
+class Roads(models.Model):
+    id = models.BigIntegerField(primary_key=True)
+    geom = models.MultiLineStringField(blank=True, null=True)
+    lanes = models.CharField(max_length=254, blank=True, null=True)
+    name = models.CharField(max_length=254, blank=True, null=True)
+    surface = models.CharField(max_length=254, blank=True, null=True)
+    bridge = models.CharField(max_length=254, blank=True, null=True)
+    road_class = models.CharField(max_length=27, blank=True, null=True)
+    road_no = models.CharField(max_length=30, blank=True, null=True)
+    road_width = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    traffic = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    road_stage = models.CharField(max_length=100, blank=True, null=True)
+    authority = models.CharField(max_length=50, blank=True, null=True)
+    county = models.CharField(max_length=100, blank=True, null=True)
+    road_lengt = models.FloatField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'roads'
+
+class RoadCondition(models.Model):
+    id = models.BigIntegerField(primary_key=True)
+    geom = models.MultiLineStringField(blank=True, null=True)
+    name = models.CharField(max_length=254, blank=True, null=True)
+    road_no = models.CharField(max_length=30, blank=True, null=True)
+    rd_condtn = models.CharField(max_length=100, blank=True, null=True)
+    condition_field = models.FloatField(db_column='condition_', blank=True, null=True)  # Field renamed because it ended with '_'.
+
+    class Meta:
+        managed = False
+        db_table = 'road_condition'
+
+class Development(models.Model):
+    id = models.BigIntegerField(primary_key=True)
+    geom = models.MultiLineStringField(blank=True, null=True)
+    road_no = models.CharField(max_length=30, blank=True, null=True)
+    contractor = models.CharField(max_length=120, blank=True, null=True)
+    prj_name = models.CharField(max_length=120, blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
+    conct_sum = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    nature_dvp = models.CharField(max_length=120, blank=True, null=True)
+    status = models.CharField(max_length=120, blank=True, null=True)
+    maint_type = models.CharField(max_length=100, blank=True, null=True)
+    funding = models.CharField(max_length=100, blank=True, null=True)
+    materials_field = models.CharField(db_column='materials_', max_length=254, blank=True, null=True)  # Field renamed because it ended with '_'.
+    developed_field = models.FloatField(db_column='developed_', blank=True, null=True)  # Field renamed because it ended with '_'.
+
+    class Meta:
+        managed = False
+        db_table = 'development'
+
+
+class Bridges(models.Model):
+    id = models.BigIntegerField(primary_key=True)
+    geom = models.PointField(blank=True, null=True)
+    road_no = models.CharField(max_length=80, blank=True, null=True)
+    bridge_typ = models.CharField(max_length=80, blank=True, null=True)
+    cross_typ = models.CharField(max_length=80, blank=True, null=True)
+    spstruct_m = models.CharField(max_length=80, blank=True, null=True)
+    spstruct_c = models.CharField(max_length=80, blank=True, null=True)
+    sbstruct_m = models.CharField(max_length=80, blank=True, null=True)
+    deck_c = models.CharField(max_length=80, blank=True, null=True)
+    stuct_typ = models.CharField(max_length=80, blank=True, null=True)
+    sbstruct_c = models.CharField(max_length=80, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'bridges'
+
 class RoadReport(models.Model):
     REPORT_TYPE = (
         ("BP", "Bump"),
         ("RD", "Road Sign"),
         ("PH", "PotHoles"),
         ("DG", "Drainage"),
+        ("KB", "Kerb"),
+        ("RS", "Road Sign"),
+        ("BR", "Bridges"),
+        ("Ct", "Culvert"),
+        ("SD", "Shoulders"),
     )
 
     title = models.CharField("Title", max_length=50)
