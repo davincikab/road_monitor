@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <div class="filter-section collapse-filter py-2 px-2" id="filter-section">
+    <div class="filter-section py-2 px-2" id="filter-section">
         <span class="btn-close" id="btn-close">&times;</span>
         <h5 class="title-section">Visual Type</h5>
         <div class="section-viusal py-2 px-2" id="secton-visual">
@@ -29,9 +29,9 @@
                 </label>
             </div>
             <div class="form-group d-flex">
-                <input class="form-check" type="radio" name="visual" id="material" value="material">
-                <label class="form-check-label" for="material">
-                  Material
+                <input class="form-check" type="radio" name="visual" id="material" value="funding">
+                <label class="form-check-label" for="funding">
+                  Funding
                 </label>
             </div>
 
@@ -43,22 +43,29 @@
             </div>
 
             <div class="form-group d-flex">
-                <input class="form-check" type="radio" name="visual" id="surface" value="surface" >
-                <label class="form-check-label" for="surface">
-                  Surface
+                <input class="form-check" type="radio" name="visual" id="surface" value="developmentType" >
+                <label class="form-check-label" for="developmentType">
+                  Nature of Development
                 </label>
             </div>
 
             <div class="form-group d-flex">
-                <input class="form-check" type="radio" name="visual" id="structure" value="structure" >
-                <label class="form-check-label" for="structure">
-                  Structure
+                <input class="form-check" type="radio" name="visual" id="structure" value="status" >
+                <label class="form-check-label" for="status">
+                  Status
                 </label>
             </div>
+
+            <div class="form-group d-flex">
+              <input class="form-check" type="radio" name="visual" id="structure" value="maintenanceType" >
+              <label class="form-check-label" for="maint_type">
+                Maintenance Type
+              </label>
+          </div>
         </div>
 
         <h5 class="title-filter">Filter</h5>
-        <div class="section-filter" id="secton-filter">
+        <div class="section-filter d-none" id="secton-filter">
             <div class="form-row mb-2 pl-3">
                 <div class="col">
                     <input type="radio" class="form-check" name="progress"  value="all" id="all">

@@ -7,13 +7,10 @@ var searchInput = document.getElementById("search-input");
 var searchResult = document.getElementById("search-result");
 
 var roadsData;
-
-var developmentNature;
-var maintenanceType;
 var contractors;
-var status;
-var funding;
-
+var materials;
+var structure;
+var surface;
 
 
 var map = L.map("map", {
@@ -39,43 +36,34 @@ var cartoDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/
 }).addTo(map);;
 
 // 
-function getRoadColor(feature, visual) {
-    let colorsOne =['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928']
-    let colorsTwo = ['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f'];
+function getRoadColor(visual, feature) {
+    let colorsOne = ['#a50026','#d73027','#f46d43','#fdae61','#fee090','#ffffbf','#e0f3f8','#abd9e9','#74add1','#4575b4','#313695'];
+    let colorsTwo = ['#d53e4f','#fc8d59','#fee08b','#ffffbf','#e6f598','#99d594','#3288bd']
 
-    if (visual == "status") {
-        let value = feature.properties.status;
-        let index =status.indexOf(value);
+    if (visual == "material") {
+        let value = feature.properties.material;
+        let index = materials.indexOf(value);
 
-        return status.length <= 7 ? colorsTwo[index] : colorsOne[index];
-    } else if (visual == "funding") {
-        let value = feature.properties.funding;
-        let index = funding.indexOf(value);
-        
-        return funding.length <= 7 ? colorsTwo[index] : colorsOne[index];
-
-    }  else if (visual == "contractor") {
+        return materials.length <= 7 ? colorsTwo[index] : colorsOne[index];
+    } else if (visual == "contractor") {
         let value = feature.properties.contractor;
         let index = contractors.indexOf(value);
         
         return contractors.length <= 7 ? colorsTwo[index] : colorsOne[index];
 
-    } else if (visual == "developmentType") {
-        let value = feature.properties.nature_dvp;
-        let index = developmentNature.indexOf(value);
-
-        // console.log(developmentNature);
-        // console.log(colorsTwo[index]);
+    } else if (visual == "structure") {
+        let value = feature.properties.road_struc;
+        let index = structure.indexOf(value);
         
-        return developmentNature.length <= 7 ? colorsTwo[index] : colorsOne[index];
+        return structure.length <= 7 ? colorsTwo[index] : colorsOne[index];
 
-    } else if (visual == "maintenanceType") {
-        let value = feature.properties.maint_type;
-        let index = maintenanceType.indexOf(value);
+    } else if (visual == "surface") {
+        let value = feature.properties.surface;
+        let index = surface.indexOf(value);
         
-        return maintenanceType <= 7 ? colorsTwo[index] : colorsOne[index];
+        return surface <= 7 ? colorsTwo[index] : colorsOne[index];
     } else {
-        return "#c9c122";
+        return "#ff002e";
     }
 
 }
@@ -114,53 +102,6 @@ function onEachRoadFeature(feature, layer) {
 }
 
 roads.addTo(map);
-
-var roadCondition = L.geoJson(null, {
-    style:function(feature) {
-        return {
-            color:getRoadConditionColor(feature),
-            weight:2,
-        }
-    },
-    onEachFeature:onEachRoadFeature
-});
-
-function getRoadConditionColor(feature) {
-    let condition = ['NULL', 'Under Construction', 'Poor', 'Fair', 'Good'];
-    let colors = ['#1b9e77','#d95f02','#7570b3','#e7298a','#66a61e'];
-
-    let index = condition.indexOf(feature.properties.rd_condtn);
-    return colors[index]
-}
-
-var roadDevelopment = L.geoJson(null, {
-    style:function(feature) {
-        return {
-            fillColor:"#fc8d59",
-            color:getRoadColor(feature, "funding"),
-            weight:1
-        }
-    },
-    onEachFeature:onEachWardFeature
-});
-
-var roadBridges = L.geoJson(null, {
-    style:function(feature) {
-        return {
-            fillColor:"#fc8d59",
-            color:"#c9c122",
-            weight:0.5
-        }
-    },
-    pointToLayer:function(feature, latLng) {
-        return L.marker(latLng, {});
-    },
-    onEachFeature:onEachWardFeature
-});
-
-function createPopupContent(properties) {
-    return ;
-}
 
 // ward layer
 var wards = L.geoJson(null, {
@@ -208,46 +149,34 @@ var municipality = L.geoJson(null, {
 let requests = [fetch("/roads"), fetch("/other_data")];
 let dataLoad = Promise.all(requests);
 
-fetch("/roads_data/")
+fetch("/roads")
 .then(response => {
     console.log(response);
 
     return response.json()
-}).then(data => {
-    console.log(data);
-    const { road, road_condition, development, bridges} = data;
+}).then(road => {
     // add year column
-    // road.features.forEach(feature => {
-    //     if(feature.properties.constructi) {
-    //         feature.properties.year = feature.properties.constructi.split(",")[1]
-    //     }
+    road.features.forEach(feature => {
+        if(feature.properties.constructi) {
+            feature.properties.year = feature.properties.constructi.split(",")[1]
+        }
         
-    //     return feature;
-    // });
+        return feature;
+    });
 
-    roadsData = JSON.parse(road);
+    roadsData = road;
 
-    // console.log(road);
-    let developmentData = JSON.parse(development);
+    console.log(road);
+    roads.addData(road);
 
-    console.log(developmentData);
-    // update the filter arrays;
-    developmentNature = getUniqueValues(developmentData, "nature_dvp");
-    maintenanceType = getUniqueValues(developmentData, "maint_type");
-    status = getUniqueValues(developmentData, "status");
-    contractors = getUniqueValues(developmentData, "contractor");
-    funding = getUniqueValues(developmentData, "funding");
+    materials = getUniqueValues(road, "material");
+    surface = getUniqueValues(road, "surface");
+    structure = getUniqueValues(road, "road_struc");
+    contractors = getUniqueValues(road, "contractor");
 
-    // update geojson objects
-    roads.addData(JSON.parse(road));
-    roadCondition.addData(JSON.parse(road_condition));
-    roadDevelopment.addData(JSON.parse(development));
-    roadBridges.addData(JSON.parse(bridges));
-
-
-    // updateSelectElement(materials, materialSelect);
-    // updateSelectElement(surface, surfaceSelect);
-    // updateSelectElement(contractors, contractorSelect);
+    updateSelectElement(materials, materialSelect);
+    updateSelectElement(surface, surfaceSelect);
+    updateSelectElement(contractors, contractorSelect);
 })
 .catch(error => {
     console.log(error);
@@ -289,9 +218,6 @@ function updateSelectElement(data, element) {
 // layer control
 var overlay = {
     "Roads":roads,
-    "Road Condition": roadCondition,
-    "Development":roadDevelopment,
-    "Bridges":roadBridges,
     "Ward" :wards,
     "Municipility":municipality
 };
@@ -341,17 +267,16 @@ visualType.forEach(visual => {
     visual.addEventListener("change", function(e) {
         // get the value
         let value = e.target.value;
-        console.log()
         updateVisual(value);
     });
 });
 
 
 function updateVisual(value) {
-    roadDevelopment.eachLayer(layer => {
+    roads.eachLayer(layer => {
         let feature = layer.feature;
         layer.setStyle({
-            color:getRoadColor(feature, value),
+            color:getRoadColor(value, feature),
             weight:3
         });
     });
@@ -375,18 +300,16 @@ function updateLegend(value) {
    
     // create a color scale
     let legendContent = "";
-    let feature = roadDevelopment.toGeoJSON().features[0];
+    let feature = roads.toGeoJSON().features[0];
 
-    if(value == "status") {
-        legendContent = getLegendContent(status, feature, "status", value);
+    if(value == "material") {
+        legendContent = getLegendContent(materials, feature, "material", value);
     } else if (value == "contractor") {
         legendContent = getLegendContent(contractors, feature, "contractor", value);
-    } else if (value == "funding") {
-        legendContent = getLegendContent(funding, feature, "funding", value);
-    } else if (value == "developmentType") {
-        legendContent = getLegendContent(developmentNature, feature, "nature_dvp", value);
-    } else if (value == "maintenanceType") {
-        legendContent = getLegendContent(maintenanceType, feature, "maint_type", value);
+    } else if (value == "surface") {
+        legendContent = getLegendContent(surface, feature, "surface", value);
+    } else if (value == "structure") {
+        legendContent = getLegendContent(structure, feature, "road_struc", value);
     } 
 
 
@@ -398,8 +321,7 @@ function getLegendContent(data, feature, field, value) {
     let legendContent = "";
     data.forEach(element => {
         feature.properties[field] = element;
-       
-        let color = getRoadColor(feature, value);
+        let color = getRoadColor(value, feature);
 
         legendContent += "<div class='legend_wrapper'><div class='legend-item' style='background-color:"+color+"'></div><span>"+element+"</span></div>";
     });
@@ -407,7 +329,83 @@ function getLegendContent(data, feature, field, value) {
     return legendContent;
 }
 
-// Search road segments
+// Filter Section
+var filterControl = new L.Control({position:"topleft"});
+
+filterControl.onAdd = function(map) {
+    let div = L.DomUtil.create("div", "leaflet-touch leaflet-bar");
+
+    div.innerHTML = "<a><i class='fa fa-filter'></i></a>";
+
+    div.addEventListener("click", function(e) {
+        filterSection.classList.toggle("collapse-filter");
+        map.removeControl(filterControl);
+    });
+
+    return div;
+}
+
+filterControl.addTo(map);
+
+closeFilterButton.addEventListener("click", function(e) {
+    filterSection.classList.toggle("collapse-filter");
+    filterControl.addTo(map);
+});
+
+
+// Filter data
+var progessButtons = document.querySelectorAll(".col .form-check");
+progessButtons.forEach(progressButton => {
+    progressButton.addEventListener("change", function(e) {
+        let value = e.target.value;
+        let currentYear = new Date().getFullYear();
+
+        let data = JSON.parse(JSON.stringify(roadsData));
+        roads.clearLayers();
+        if(value == "completed") {
+            data.features = data.features.filter(feature => feature.properties.year <= currentYear);
+            roads.addData(data);
+        } else if (value == "all") {
+            roads.addData(data);
+        } 
+        else {
+            data.features = data.features.filter(feature => feature.properties.year >= currentYear);
+            roads.addData(data);
+        }
+    });
+});
+
+// select filters
+var customSelect = document.querySelectorAll(".custom-select");
+
+customSelect.forEach(cs => {
+    cs.addEventListener("change", function(e) {
+        let value = e.target.value;
+        let name = e.target.name;
+
+        roads.clearLayers();
+        let data = JSON.parse(JSON.stringify(roadsData));
+
+        if(value == "all") {
+            roads.addData(data);
+            return;
+        }
+        // filter accordingly
+        if(name == "contractor") {
+            data.features = data.features.filter(feature => feature.properties.contractor == value);
+        } else if (name == "material") {
+            data.features = data.features.filter(feature => feature.properties.material == value);
+        } else if ( name == "surface") {
+            data.features = data.features.filter(feature => feature.properties.surface == value);
+        } else {
+
+        }
+
+        roads.addData(data);
+
+    });
+});
+
 // Search 
 searchInput.addEventListener("input", function(e) {
     let value = e.target.value;

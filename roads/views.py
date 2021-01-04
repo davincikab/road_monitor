@@ -79,10 +79,10 @@ def get_graph_data(request):
 
 def get_roads_data(request):
    data = {
-       'roads':serialize('geojson', Roads.objects.all()),
+       'road':serialize('geojson', Roads.objects.all()),
        'road_condition': serialize('geojson', RoadCondition.objects.all()),
        'development':serialize('geojson', Development.objects.all()),
-       'briges':serialize('geojson', Bridges.objects.all())
+       'bridges':serialize('geojson', Bridges.objects.all())
    }
 
    return JsonResponse(data)
