@@ -77,6 +77,15 @@ def get_graph_data(request):
 
     return HttpResponse(json.dumps({'construction':construction, 'maintenance':maintenance, 'surface':surface,'structure':structure}))
 
+def get_roads_data(request):
+   data = {
+       'roads':serialize('geojson', Roads.objects.all()),
+       'road_condition': serialize('geojson', RoadCondition.objects.all()),
+       'development':serialize('geojson', Development.objects.all()),
+       'briges':serialize('geojson', Bridges.objects.all())
+   }
+
+   return JsonResponse(data)
 
 def wards_data(request):
     ward = serialize('geojson', Wards.objects.all())
