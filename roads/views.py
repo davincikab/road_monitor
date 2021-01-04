@@ -14,7 +14,7 @@ from django.core.serializers import serialize
 from django.contrib.gis.geos import GEOSGeometry
 
 #models
-from .models import Wards, Road, Municipality, RoadReport
+from .models import RoadReport, Road, Wards, Municipality, RoadCondition, Roads, Development, Bridges
 from .forms import RoadReportForm
 
 # utils
