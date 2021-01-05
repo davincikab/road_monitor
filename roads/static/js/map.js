@@ -381,7 +381,27 @@ L.control.layers(baseLayer, overlay, {collapsed:true}).addTo(map);
 
 // Event listeners
 map.on("overlayadd", function(e) {
+    console.log(e);
     roads.bringToFront();
+
+    if(e.name ="Road Condition") {
+        // update the legend
+        let conditionData = roadCondition.toGeoJSON();
+        let statusData = conditionData.features.map(feature => feature.properties.rd_condtn);
+        statusData = statusData.reduce((a, b) =>{
+            if(a.indexOf(b) == -1) {
+                a.push(b);
+            }
+
+            return a;
+        }, []);
+
+        let feature = conditionData.features[0];
+        var legendContent = getLegendContent(statusData, feature, 'rd_condtn', "rd_condtn", true);
+
+        let legendContainer = document.getElementById("collapseOne");
+        legendContainer.innerHTML = legendContent;
+    }
 });
 
 map.on("layeradd", function(e) {
@@ -469,12 +489,12 @@ function updateLegend(value) {
 }
 
 // legend colors
-function getLegendContent(data, feature, field, value) {
+function getLegendContent(data, feature, field, value, isCondition=False) {
     let legendContent = "";
     data.forEach(element => {
         feature.properties[field] = element;
        
-        let color = getRoadColor(feature, value);
+        let color = isCondition ? getRoadConditionColor(feature) : getRoadColor(feature, value);
 
         legendContent += "<div class='legend_wrapper'><div class='legend-item' style='background-color:"+color+"'></div><span>"+element+"</span></div>";
     });
@@ -482,6 +502,29 @@ function getLegendContent(data, feature, field, value) {
     return legendContent;
 }
 
+
+// Filter Section
+var filterControl = new L.Control({position:"topleft"});
+
+filterControl.onAdd = function(map) {
+    let div = L.DomUtil.create("div", "leaflet-touch leaflet-bar");
+
+    div.innerHTML = "<a><i class='fa fa-filter'></i></a>";
+
+    div.addEventListener("click", function(e) {
+        filterSection.classList.toggle("collapse-filter");
+        map.removeControl(filterControl);
+    });
+
+    return div;
+}
+
+filterControl.addTo(map);
+
+closeFilterButton.addEventListener("click", function(e) {
+    filterSection.classList.toggle("collapse-filter");
+    filterControl.addTo(map);
+});
 
 // Filter data
 var progessButtons = document.querySelectorAll(".col .form-check");

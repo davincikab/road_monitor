@@ -58,7 +58,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context['road_count'] = Roads.objects.all().count()
         context['contractors_count'] = Development.objects.values("contractor").annotate(Count("contractor", distinct=True)).count()
         context['contractors'] = Development.objects.values("contractor").annotate(contracts_count=Count("contractor"))
-        context['materials'] = Roads.objects.values("surface").annotate(material_count=Count("surface"))
+        context['status'] = Development.objects.values("status").annotate(status_count=Count("status"))
         context['road_authorities'] = Roads.objects.values("authority").annotate(material_count=Count("authority"))
         context['roads_length'] = Roads.objects.values("geom").annotate(length=Length("geom")).values("length")
         context['total_length'] = reduce((lambda x, y: x +y), [r['length'].km for r in context["roads_length"]])
