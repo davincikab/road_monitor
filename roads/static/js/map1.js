@@ -174,6 +174,8 @@ fetch("/roads")
     structure = getUniqueValues(road, "road_struc");
     contractors = getUniqueValues(road, "contractor");
 
+    // create a cost slider
+
     updateSelectElement(materials, materialSelect);
     updateSelectElement(surface, surfaceSelect);
     updateSelectElement(contractors, contractorSelect);

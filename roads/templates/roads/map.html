@@ -5,6 +5,7 @@
 {% block style %}
     <link rel="stylesheet" href="{% static 'leaflet/leaflet.css' %}">
     <link rel="stylesheet" href="{% static 'css/map.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/css/bootstrap-slider.min.css" integrity="sha512-3q8fi8M0VS+X/3n64Ndpp6Bit7oXSiyCnzmlx6IDBLGlY5euFySyJ46RUlqIVs0DPCGOypqP8IRk/EyPvU28mQ==" crossorigin="anonymous" />
 {% endblock %}
 
 {% block content %}
@@ -20,99 +21,119 @@
 
     <div class="filter-section py-2 px-2" id="filter-section">
         <span class="btn-close" id="btn-close">&times;</span>
-        <h5 class="title-section">Visual Type</h5>
-        <div class="section-viusal py-2 px-2" id="secton-visual">
-            <div class="form-group d-flex">
-                <input class="form-check" type="radio" name="visual" id="material" checked value="default">
-                <label class="form-check-label" for="material">
-                  Default
-                </label>
-            </div>
-            <div class="form-group d-flex">
-                <input class="form-check" type="radio" name="visual" id="material" value="funding">
-                <label class="form-check-label" for="funding">
-                  Funding
-                </label>
+        <div class="accordion" id="accordionExample">
+          <div class="card">
+            <div class="card-header py-0 px-0" id="headingOne">
+              <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#section-visual" aria-expanded="true" aria-controls="collapseOne">
+                 Visual Type
+                </button>
+              </h2>
             </div>
 
-            <div class="form-group d-flex">
-                <input class="form-check" type="radio" name="visual" id="contractor" value="contractor">
-                <label class="form-check-label" for="contractor">
-                  Contractor
+          
+          <div class="collapse show section-viusal py-2 px-2" id="section-visual">
+              <div class="form-group d-flex">
+                  <input class="form-check" type="radio" name="visual" id="material" checked value="default">
+                  <label class="form-check-label" for="material">
+                    Default
+                  </label>
+              </div>
+              <div class="form-group d-flex">
+                  <input class="form-check" type="radio" name="visual" id="material" value="funding">
+                  <label class="form-check-label" for="funding">
+                    Funding
+                  </label>
+              </div>
+
+              <div class="form-group d-flex">
+                  <input class="form-check" type="radio" name="visual" id="contractor" value="contractor">
+                  <label class="form-check-label" for="contractor">
+                    Contractor
+                  </label>
+              </div>
+
+              <div class="form-group d-flex">
+                  <input class="form-check" type="radio" name="visual" id="surface" value="developmentType" >
+                  <label class="form-check-label" for="developmentType">
+                    Nature of Development
+                  </label>
+              </div>
+
+              <div class="form-group d-flex">
+                  <input class="form-check" type="radio" name="visual" id="structure" value="status" >
+                  <label class="form-check-label" for="status">
+                    Status
+                  </label>
+              </div>
+
+              <div class="form-group d-flex">
+                <input class="form-check" type="radio" name="visual" id="structure" value="maintenanceType" >
+                <label class="form-check-label" for="maint_type">
+                  Maintenance Type
                 </label>
             </div>
+          </div>
+          </div>
 
-            <div class="form-group d-flex">
-                <input class="form-check" type="radio" name="visual" id="surface" value="developmentType" >
-                <label class="form-check-label" for="developmentType">
-                  Nature of Development
-                </label>
-            </div>
+          <div class="card">
+          <div class="card-header py-1 px-0" id="headingOne">
+            <h2 class="mb-0">
+              <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#section-filter" aria-expanded="true" aria-controls="section-filter">
+                Filter
+              </button>
+            </h2>
+          </div>
+          
+          <div class="collapse show section-filter py-1" id="section-filter">
+              <div class="form-row mb-2 pl-3">
+                  <div class="col">
+                      <input type="radio" class="form-check" name="progress"  value="all" id="all">
+                      <label for="all">All</label>
+                    </div>
 
-            <div class="form-group d-flex">
-                <input class="form-check" type="radio" name="visual" id="structure" value="status" >
-                <label class="form-check-label" for="status">
-                  Status
-                </label>
-            </div>
+                  <div class="col">
+                    <input type="radio" class="form-check" name="progress"  value="completed" id="completed">
+                    <label for="">Completed</label>
+                  </div>
+                  <div class="col">
+                    <input type="radio" class="form-check" name="progress" value="ongoing" id="ongoing" placeholder="Last name">
+                    <label for="">Ongoing</label>
+                  </div>
+              </div>
 
-            <div class="form-group d-flex">
-              <input class="form-check" type="radio" name="visual" id="structure" value="maintenanceType" >
-              <label class="form-check-label" for="maint_type">
-                Maintenance Type
-              </label>
+              <div class="mb-3">
+                  <label class="label" for="material-select">Cost</label><br>
+                  <input id="cost-slider" type="text"/>
+              </div>
+
+              <div class="input-group  input-group-sm mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="contractor-select">Maintenance Category</label>
+                  </div>
+                  <select class="custom-select" id="maint-select" name="maintanence">
+                  </select>
+              </div>
+
+              <div class="input-group  input-group-sm mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="surface-select">Nature of Development</label>
+                  </div>
+                  <select class="custom-select" id="development-select" name="development">
+                  </select>
+              </div>
           </div>
         </div>
 
-        <h5 class="title-filter">Filter</h5>
-        <div class="section-filter d-none" id="secton-filter">
-            <div class="form-row mb-2 pl-3">
-                <div class="col">
-                    <input type="radio" class="form-check" name="progress"  value="all" id="all">
-                    <label for="all">All</label>
-                  </div>
-
-                <div class="col">
-                  <input type="radio" class="form-check" name="progress"  value="completed" id="completed">
-                  <label for="">Completed</label>
-                </div>
-                <div class="col">
-                  <input type="radio" class="form-check" name="progress" value="ongoing" id="ongoing" placeholder="Last name">
-                  <label for="">Ongoing</label>
-                </div>
-            </div>
-
-            <div class="input-group  input-group-sm mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="material-select">Material</label>
-                </div>
-                <select class="custom-select" id="material-select" name="material">
-                </select>
-            </div>
-
-            <div class="input-group  input-group-sm mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="contractor-select">Contractor</label>
-                </div>
-                <select class="custom-select" id="contractor-select" name="contractor">
-                </select>
-            </div>
-
-            <div class="input-group  input-group-sm mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="surface-select">Surface</label>
-                </div>
-                <select class="custom-select" id="surface-select" name="surface">
-                </select>
-            </div>
-        </div>
-    </div>
+      </div>
+  </div>
 </div>
 
 </div>
 {% endblock %}
 
 {% block javascript %}
-    <script src="{% static 'leaflet/leaflet.js'%}"></script>
-    <script src="{% static 'js/map.js'%}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js" integrity="sha512-f0VlzJbcEB6KiW8ZVtL+5HWPDyW1+nJEjguZ5IVnSQkvZbwBt2RfCBY0CBO1PsMAqxxrG4Di6TfsCPP3ZRwKpA==" crossorigin="anonymous"></script>
+  <script src="{% static 'leaflet/leaflet.js'%}"></script>
+  <script src="{% static 'js/map.js'%}"></script>
 {% endblock %}

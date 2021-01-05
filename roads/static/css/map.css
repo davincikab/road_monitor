@@ -17,6 +17,12 @@
     left: 12%;
 }
 
+.slider.slider-horizontal {
+    width: 210px;
+    height: 20px;
+    margin-left: 1.5em;
+}
+
 .search-result {
     cursor: pointer;
 }

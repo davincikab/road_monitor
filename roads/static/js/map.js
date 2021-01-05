@@ -1,10 +1,11 @@
 var closeFilterButton = document.getElementById("btn-close");
 var filterSection = document.getElementById("filter-section");
-var materialSelect = document.getElementById("material-select");
+var maintenanceSelect = document.getElementById("maint-select");
 var contractorSelect = document.getElementById("contractor-select");
-var surfaceSelect = document.getElementById("surface-select");
+var devSelect = document.getElementById("development-select");
 var searchInput = document.getElementById("search-input");
 var searchResult = document.getElementById("search-result");
+// var costSlider = $("#cost-slider").slider({ min: 0, max: 10, value: [0, 10], focus: true });
 
 var roadsData;
 
@@ -144,6 +145,12 @@ var roadDevelopment = L.geoJson(null, {
     onEachFeature:onEachWardFeature
 });
 
+var bridgeIcon = L.icon({
+    iconUrl:'/static/images/bridges.png',
+    iconSize:[24, 24],
+    iconAnchor:[0,0]
+});
+
 var roadBridges = L.geoJson(null, {
     style:function(feature) {
         return {
@@ -153,10 +160,10 @@ var roadBridges = L.geoJson(null, {
         }
     },
     pointToLayer:function(feature, latLng) {
-        return L.marker(latLng, {});
+        return L.marker(latLng, {icon:bridgeIcon});
     },
     onEachFeature:onEachWardFeature
-});
+}).addTo(map);
 
 function createPopupContent(properties) {
     return ;
@@ -245,8 +252,45 @@ fetch("/roads_data/")
     roadBridges.addData(JSON.parse(bridges));
 
 
-    // updateSelectElement(materials, materialSelect);
-    // updateSelectElement(surface, surfaceSelect);
+    // update the cost slider 
+    let costSum = developmentData.features.map(feature => parseInt(feature.properties.conct_sum)).filter(cost => cost);
+    costSum.sort((a,b) => a -b);
+
+    console.log(costSum);
+
+    $("#cost-slider").slider({
+        min: 0, 
+        max: costSum[costSum.length -1], 
+        value: [0, costSum[costSum.length -1]], 
+        focus: true 
+    }).on('slide', function(e) {
+        // console.log(e);
+        e.stopPropagation();
+
+        let value = e.value;
+        console.log(value);
+
+        // filter the data;
+        roadDevelopment.eachLayer(layer => {
+            let sum = layer.feature.properties.conct_sum;
+            sum = parseInt(sum) ? parseInt(sum) : 0;
+            console.log(sum);
+
+            if(sum >= value[0] && sum < value[1]) {
+                console.log(layer);
+                layer.setStyle({
+                    opacity:1
+                });
+            } else {
+                layer.setStyle({
+                    opacity:0
+                });
+            }
+        });
+    });
+
+    updateSelectElement(maintenanceType, maintenanceSelect);
+    updateSelectElement(developmentNature, devSelect);
     // updateSelectElement(contractors, contractorSelect);
 })
 .catch(error => {
@@ -407,6 +451,74 @@ function getLegendContent(data, feature, field, value) {
     return legendContent;
 }
 
+
+// Filter data
+var progessButtons = document.querySelectorAll(".col .form-check");
+progessButtons.forEach(progressButton => {
+    progressButton.addEventListener("change", function(e) {
+        let value = e.target.value;
+        let currentYear = new Date().getFullYear();
+
+        let data = JSON.parse(JSON.stringify(roadsData));
+        roads.clearLayers();
+        if(value == "completed") {
+            data.features = data.features.filter(feature => feature.properties.year <= currentYear);
+            roads.addData(data);
+        } else if (value == "all") {
+            roads.addData(data);
+        } 
+        else {
+            data.features = data.features.filter(feature => feature.properties.year >= currentYear);
+            roads.addData(data);
+        }
+    });
+});
+
+// select filters
+var customSelect = document.querySelectorAll(".custom-select");
+
+customSelect.forEach(cs => {
+    cs.addEventListener("change", function(e) {
+        let value = e.target.value;
+        let name = e.target.name;
+
+        let data = JSON.parse(JSON.stringify(roadsData));
+
+        if(value == "all") {
+            roadDevelopment.eachLayer(layer => {
+                layer.setStyle({opacity:1});
+            });
+
+            return;
+        }
+        
+        // filter accordingly
+        if(name == "maintanence") {
+            roadDevelopment.eachLayer(layer => {
+                if(layer.feature.properties.maint_type == value) {
+                    layer.setStyle({opacity:1});
+                } else {
+                    layer.setStyle({opacity:0});
+                }
+            });
+
+        } else if (name == "development") {
+            roadDevelopment.eachLayer(layer => {
+                if(layer.feature.properties.nature_dvp == value) {
+                    layer.setStyle({opacity:1});
+                } else {
+                    layer.setStyle({opacity:0});
+                }
+            });
+        } else {
+
+        }
+
+        // roadDe.addData(data);
+
+    });
+});
+
 // Search road segments
 // Search 
 searchInput.addEventListener("input", function(e) {
@@ -429,8 +541,8 @@ function filterRoadSegment(query) {
     });
 
     // create list item
-    if(data.features.length > 10) {
-        data.features = data.features.slice(0,10);
+    if(data.features.length > 7) {
+        data.features = data.features.slice(0,7);
     }
 
     if(data.features.length > 0) {
