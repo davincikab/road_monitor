@@ -7,7 +7,7 @@ def money_format(value):
     try:
         output = value
         if value > 1000000000:
-            output = f'{value/10000000000:.3g} B'
+            output = f'{value/1000000000:.3g} B'
         elif value > 1000000:
             output = f'{value/1000000:.3g} M'
         elif output > 1000:

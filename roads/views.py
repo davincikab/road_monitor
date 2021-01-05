@@ -5,6 +5,7 @@ from django.contrib.gis.db.models.functions import Length
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.base import ContentFile
 from django.utils.text import slugify
+from django.db.models.functions import ExtractYear
 
 # template 
 from django.views.generic.base import TemplateView
@@ -54,28 +55,32 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['road_count'] = Road.objects.all().count()
-        context['contractors_count'] = Road.objects.values("contractor").annotate(Count("contractor", distinct=True)).count()
-        context['contractors'] = Road.objects.values("contractor").annotate(contracts_count=Count("contractor"))
-        context['materials'] = Road.objects.values("material").annotate(material_count=Count("material"))
-        context['road_authorities'] = Road.objects.values("authority").annotate(material_count=Count("authority"))
-        context['roads_length'] = Road.objects.values("geom").annotate(length=Length("geom")).values("length")
+        context['road_count'] = Roads.objects.all().count()
+        context['contractors_count'] = Development.objects.values("contractor").annotate(Count("contractor", distinct=True)).count()
+        context['contractors'] = Development.objects.values("contractor").annotate(contracts_count=Count("contractor"))
+        context['materials'] = Roads.objects.values("surface").annotate(material_count=Count("surface"))
+        context['road_authorities'] = Roads.objects.values("authority").annotate(material_count=Count("authority"))
+        context['roads_length'] = Roads.objects.values("geom").annotate(length=Length("geom")).values("length")
         context['total_length'] = reduce((lambda x, y: x +y), [r['length'].km for r in context["roads_length"]])
-        context['total_cost'] = context['total_length']  * 1300000
+        context['conct_sum'] = Development.objects.exclude(conct_sum__isnull = True).values("conct_sum")
+        print(context['conct_sum'])
+        
+        context['total_cost'] = reduce((lambda x, y: x +y), [r['conct_sum'] for r in context["conct_sum"]])
+        print(context['total_cost'])
         return context
 
 def get_graph_data(request):
-    construction = Road.objects.values('constructi').annotate(count=Count("constructi"))
-    maintenance = Road.objects.values('maintenanc').annotate(count=Count("maintenanc"))
-    surface = Road.objects.values('surface').annotate(count=Count("surface"))
-    structure = Road.objects.values('road_struc').annotate(count=Count("road_struc"))
+    construction = Development.objects.annotate(year=ExtractYear('start_date')).values('year').annotate(count=Count('year'))
+    maintenance = Development.objects.values('maint_type').annotate(count=Count("maint_type"))
+    surface = Roads.objects.values('surface').annotate(count=Count("surface"))
+    road_class = Roads.objects.values('road_class').annotate(count=Count("road_class"))
 
     construction = [c for c in construction]
     maintenance = [m for m in maintenance]
     surface = [s for s in surface]
-    structure = [st for st in structure]
+    road_class = [st for st in road_class]
 
-    return HttpResponse(json.dumps({'construction':construction, 'maintenance':maintenance, 'surface':surface,'structure':structure}))
+    return HttpResponse(json.dumps({'construction':construction, 'maintenance':maintenance, 'surface':surface,'road_class':road_class}))
 
 def get_roads_data(request):
    data = {

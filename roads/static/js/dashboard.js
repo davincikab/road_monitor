@@ -75,7 +75,7 @@ var maintenanceChart = new Chart(ctxLine, {
 // structure-chart
 var ctxLine = document.getElementById('structure-chart').getContext('2d');
 
-var roadStructureChart = new Chart(ctxLine, {
+var roadClassChart = new Chart(ctxLine, {
     type: 'bar',
     data: {
         labels:["NULL", "base", "Pavement", "Bitumen", "Sub base"],
@@ -88,7 +88,7 @@ var roadStructureChart = new Chart(ctxLine, {
     options: {
         title: {
             display: true,
-            text: 'Road Structure'
+            text: 'Road Classes'
         },
         legend: {
             display: false,
@@ -133,20 +133,20 @@ fetch("/dashboard_data/")
 })
 .then(data => {
     console.log(data);
-    let {construction, maintenance, structure, surface} = data;
+    let {construction, maintenance, road_class, surface} = data;
 
+    construction = construction.filter(ct => ct.year).sort((a,b) => a.year - b.year)
     // construction
-    let [years, constructionCount] = cleanAndSort(construction, "constructi");
-    roadsChart.data.labels = years;
-    roadsChart.data.datasets[0].data = constructionCount
+    roadsChart.data.labels = construction.map(ct => ct.year);
+    roadsChart.data.datasets[0].data = construction.map(ct => ct.count);
     roadsChart.update();
 
     // Maintenance
-    let [maintenanceYears, maintenanceCount] = cleanAndSort(maintenance, "maintenanc");
+    // let [maintenanceYears, maintenanceCount] = cleanAndSort(maintenance, "maintenanc");
 
-    maintenanceChart.data.labels = maintenanceYears;
-    maintenanceChart.data.datasets[0].data = maintenanceCount;
-    maintenanceChart.update();
+    // maintenanceChart.data.labels = maintenanceYears;
+    // maintenanceChart.data.datasets[0].data = maintenanceCount;
+    // maintenanceChart.update();
 
     // surface
     console.log(surface);
@@ -155,10 +155,10 @@ fetch("/dashboard_data/")
     roadSurfaceChart.update();
 
     // structure
-    console.log(structure);
-    roadStructureChart.data.labels = structure.map(el => el.road_struc);
-    roadStructureChart.data.datasets[0].data =  structure.map(el => el.count);
-    roadStructureChart.update();
+    console.log(road_class);
+    roadClassChart.data.labels = road_class.map(el => el.road_class);
+    roadClassChart.data.datasets[0].data =  road_class.map(el => el.count);
+    roadClassChart.update();
 
 
 })
@@ -168,7 +168,9 @@ fetch("/dashboard_data/")
 
 function cleanAndSort(data, field) {
     newData = data.filter(element => element[field]).map(element => {
-        element.year = parseInt(element[field].split(',')[1]);
+        console.log(element[field]);
+
+        element.year = new Date(element[field]).year;
         return element;
     });
 
