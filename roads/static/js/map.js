@@ -97,10 +97,9 @@ function onEachRoadFeature(feature, layer) {
     "<h5 class='popup-title'>"+ feature.properties.name +"</h5>"+
     "<div class='popup-body'>"+
         "<p class='popup-item'>Surface<b>"+ feature.properties.surface +"</b></p>"+
-        "<p class='popup-item'>Contruction<b>"+ feature.properties.contructi +"</b></p>"+
-        "<p class='popup-item'>Authority<b>"+ feature.properties.authority +"</b></p>"+
-        "<p class='popup-item'>Material<b>"+ feature.properties.material +"</b></p>"+
-        "<p class='popup-item'>Contractor<b>"+ feature.properties.contractor +"</b></p>"+
+        "<p class='popup-item'>Road No<b>"+ feature.properties.road_no +"</b></p>"+
+        "<p class='popup-item'>Road Stage<b>"+ feature.properties.road_stage +"</b></p>"+
+        "<p class='popup-item'>Road Class<b>"+ feature.properties.road_class +"</b></p>"+
     "</div>"+
     "</div>";
     layer.bindPopup(popupContent);
@@ -123,7 +122,16 @@ var roadCondition = L.geoJson(null, {
             weight:2,
         }
     },
-    onEachFeature:onEachRoadFeature
+    onEachFeature:function(feature, layer) {
+        let popupContent = "<div class='popup-content'>"+
+        "<h5 class='popup-title'>"+ feature.properties.name +"</h5>"+
+        "<div class='popup-body'>"+
+            "<p class='popup-item'>Road No.<b>"+ feature.properties.road_no +"</b></p>"+
+            "<p class='popup-item'>Road Condition<b>"+ feature.properties.rd_condtn +"</b></p>"+
+        "</div>"+
+        "</div>";
+        layer.bindPopup(popupContent);
+    }
 });
 
 function getRoadConditionColor(feature) {
@@ -142,7 +150,20 @@ var roadDevelopment = L.geoJson(null, {
             weight:1
         }
     },
-    onEachFeature:onEachWardFeature
+    onEachFeature:function(feature, layer) {
+        let popupContent = "<div class='popup-content'>"+
+        "<h5 class='popup-title'>"+ feature.properties.road_no +"</h5>"+
+        "<div class='popup-body'>"+
+            "<p class='popup-item'>Project Name<b>"+ feature.properties.prj_name +"</b></p>"+
+            "<p class='popup-item'>Contractor<b>"+ feature.properties.contractor +"</b></p>"+
+            "<p class='popup-item'>Maintenance Type<b>"+ feature.properties.maint_type +"</b></p>"+
+            "<p class='popup-item'>Development Nature<b>"+ feature.properties.nature_dvp +"</b></p>"+
+            "<p class='popup-item'>Contract Cost<b>"+ feature.properties.conct_sum +"</b></p>"+
+            "<p class='popup-item'>Funding<b>"+ feature.properties.funding +"</b></p>"+
+        "</div>"+
+        "</div>";
+        layer.bindPopup(popupContent);
+    }
 });
 
 var bridgeIcon = L.icon({
@@ -162,7 +183,17 @@ var roadBridges = L.geoJson(null, {
     pointToLayer:function(feature, latLng) {
         return L.marker(latLng, {icon:bridgeIcon});
     },
-    onEachFeature:onEachWardFeature
+    onEachFeature:function(feature, layer) {
+        let popupContent = "<div class='popup-content'>"+
+        "<h5 class='popup-title'>"+ feature.properties.road_no +"</h5>"+
+        "<div class='popup-body'>"+
+            "<p class='popup-item'>Bridge Type<b>"+ feature.properties.bridge_typ +"</b></p>"+
+            "<p class='popup-item'>Cross Type<b>"+ feature.properties.cross_typ +"</b></p>"+
+            "<p class='popup-item'>Structure Type<b>"+ feature.properties.struct_typ +"</b></p>"+
+        "</div>"+
+        "</div>";
+        layer.bindPopup(popupContent);
+    }
 }).addTo(map);
 
 function createPopupContent(properties) {
@@ -491,7 +522,7 @@ customSelect.forEach(cs => {
 
             return;
         }
-        
+
         // filter accordingly
         if(name == "maintanence") {
             roadDevelopment.eachLayer(layer => {
@@ -592,7 +623,8 @@ function listEventListener(e) {
                 color:"#c7f709",
                 weight:4
             }
-        }
+        },
+        onEachFeature:onEachRoadFeature
     }).addTo(map);
     map.fitBounds(feature.getBounds());
 }
